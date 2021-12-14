@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="My Checklists">
+    <meta name="description" content="">
+    <meta name="page_type" content="np-template-header-footer-from-plugin">
+    <title>Home</title>
+    <link rel="stylesheet" href="nicepage.css" media="screen">
+    <link rel="stylesheet" href="Home.css" media="screen">
+    <link rel="stylesheet" href="checklist.css">
+    <link rel="stylesheet" href="observation.css">
+    <link rel="stylesheet" href="ajax-drop-down.css" media="screen">
+    <script src="urls.js"></script>
+    <script src="checklist.js"></script>
+    <script src="observation.js"></script>
+    <script src="jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+    <meta name="generator" content="Nicepage 4.0.3, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
+    
+    
+    
+    
+    
+    
+    
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "",
+		"logo": "images/default-logo.png"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Home">
+    <meta property="og:type" content="website">
+  </head>
+  <body onload="init()" data-home-page="Home.html" data-home-page-title="Home" class="u-body">
+    <header class="u-clearfix u-header u-header" id="sec-9313"></header>
+    <section class="u-align-center u-clearfix u-section-1" id="sec-f54f">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1"><span class="u-align-right u-dialog-link u-hover-feature u-icon u-icon-circle u-icon-1" data-href="#addChecklistModal"><svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 32 32" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-585f"></use></svg><svg class="u-svg-content" viewBox="0 0 32 32" id="svg-585f"><defs><style>.cls-1{fill:none;}</style>
+      </defs><g id="Layer_2"><path d="M16,29A13,13,0,1,1,29,16,13,13,0,0,1,16,29ZM16,5A11,11,0,1,0,27,16,11,11,0,0,0,16,5Z"></path><path d="M16,23a1,1,0,0,1-1-1V10a1,1,0,0,1,2,0V22A1,1,0,0,1,16,23Z"></path><path d="M22,17H10a1,1,0,0,1,0-2H22a1,1,0,0,1,0,2Z"></path>
+      </g><g id="frame"><rect class="cls-1" height="32" width="32"></rect>
+      </g></svg></span>
+              <h2 class="u-align-left u-text u-text-default u-text-1">My Checklists</h2>
+            </div>
+      
+    </section>
+    <section class="u-align-center u-clearfix u-section-2" id="carousel_55f9">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div id="chekListItems" class="u-accordion u-expanded-width u-accordion-1">
+        </div>
+      </div>
+    </section>
+        
+  <section class="u-align-center u-black u-clearfix u-container-style u-dialog-block u-opacity u-opacity-70 u-section-7" id="addObservationDialogBox">
+      <div class="u-align-left u-container-style u-dialog u-shape-rectangle u-white u-dialog-1">
+        <div class="u-container-layout u-valign-bottom u-container-layout-1">
+          <h5 id="addObservationDialogBoxTitle"></h5>
+          <form id="addObservationForm"  enctype="multipart/form-data" method="POST">
+          <div id="addObservationTabsHeaderList" class="u-expanded-width u-tabs u-tabs-1">
+            <ul class="u-tab-list u-unstyled" role="tablist">
+              <li class="u-tab-item" role="presentation">
+                <a class="active u-button-style u-palette-1-light-1 u-tab-link u-tab-link-1" id="link-tab-observation" href="#tab-observation" role="tab" aria-controls="tab-observation" aria-selected="true">Observation<br>
+                </a>
+              </li>
+              <li class="u-tab-item" role="presentation">
+                <a class="u-button-style u-palette-1-light-1 u-tab-link u-tab-link-1" id="link-tab-occurence" href="#tab-occurence" role="tab" aria-controls="tab-occurence" aria-selected="false">Occurence</a>
+              </li>
+              <li class="u-tab-item" role="presentation">
+                <a class="u-button-style u-palette-1-light-1 u-tab-link u-tab-link-2" id="link-tab-event" href="#tab-event" role="tab" aria-controls="tab-event" aria-selected="false">Event</a>
+              </li>
+              <li class="u-tab-item" role="presentation">
+                <a class="u-button-style u-palette-1-light-1 u-tab-link u-tab-link-3" id="link-tab-identification" href="#tab-identification" role="tab" aria-controls="tab-identification" aria-selected="false">Identification</a>
+              </li>
+              <li class="u-tab-item" role="presentation">
+                <a class="u-button-style u-palette-1-light-1 u-tab-link u-tab-link-4" id="link-tab-taxonomy" href="#tab-taxonomy" role="tab" aria-controls="tab-taxonomy" aria-selected="false">Taxonomy</a>
+              </li>
+              <li id="link-tab" class="u-tab-item" role="presentation">
+                <a class="u-button-style u-palette-1-light-1 u-tab-link u-tab-link-5" id="link-tab-location" href="#tab-location" role="tab" aria-controls="tab-location" aria-selected="false">Location</a>
+              </li>
+            </ul>
+            <div class="u-tab-content">
+              
+              <div class="u-container-style u-tab-active u-tab-pane" id="tab-observation" role="tabpanel" aria-labelledby="link-tab-observation">
+                <div class="u-container-layout u-container-layout-2">
+                  <div class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form u-form u-form-1">
+                      <input id="addObservationCheckListId" type="hidden" name="addObservationCheckListId">
+                      <input id="addObservationCheckListName" type="hidden" name="addObservationCheckListName">
+                      <input id="addObservationUserId" type="hidden" name="addObservationUserId">
+                      <div class="u-form-group u-form-name">
+                        <label for="addObservationSpeciesCount" class="u-form-control-hidden u-label"></label>
+                        <input type="number" min="0" oninput="this.value = Math.abs(this.value)" placeholder="Species count" id="addObservationSpeciesCount" name="addObservationSpeciesCount" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" autofocus="autofocus">
+                      </div>
+                      <div class="u-form-group u-form-select u-form-group-5">
+                        <label for="addObservationSpeciesName" class="u-form-control-hidden u-label"></label>
+                        <div class="u-form-select-wrapper">
+                          <div class="dropdown">
+                            <input id="addObservationSpeciesName" type="text" placeholder="Search Species..." name="addObservationSpeciesName" onclick="myFunction()" onkeyup="getSpeciesOnKeyPress(this.value)" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                            <div id="addObservationSpeciesNameDropDown" class="dropdown-content">
+                            </div>
+                          </div>
+                          
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                        </div>
+                      </div>
+                      <div class="u-form-group u-form-select u-form-group-2">
+                        <label for="addObservationSpeciesGender" class="u-form-control-hidden u-label"></label>
+                        <div class="u-form-select-wrapper">
+                          <select id="addObservationSpeciesGender" name="addObservationSpeciesGender" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="required">
+                            <option value="Select Gender">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Hermaphrodite">Hermaphrodite</option>
+                            <option value="Mixed">Mixed</option>
+                            <option value="Unknown">Unknown</option>
+                          </select>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                        </div>
+                      </div>
+                      <div class="u-form-group u-form-name">
+                        <label for="addObservationMaleCount" class="u-form-control-hidden u-label"></label>
+                        <input type="number" min="0" oninput="this.value = Math.abs(this.value)" placeholder="Male Count" id="addObservationMaleCount" name="addObservationMaleCount" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" autofocus="autofocus">
+                      </div>
+                      <div class="u-form-group u-form-name">
+                        <label for="addObservationFemaleCount" class="u-form-control-hidden u-label"></label>
+                        <input type="number" min="0" oninput="this.value = Math.abs(this.value)" placeholder="Female Count" id="addObservationFemaleCount" name="addObservationFemaleCount" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" autofocus="autofocus">
+                      </div>
+                      <div class="u-form-group u-form-name">
+                        <label for="addObservationChildCount" class="u-form-control-hidden u-label"></label>
+                        <input type="number" min="0" oninput="this.value = Math.abs(this.value)" placeholder="Child Count" id="addObservationChildCount" name="addObservationChildCount" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" autofocus="autofocus">
+                      </div>
+                      <div class="u-form-group u-form-name">
+                        <input type="file" multiple id="addObservationFileUpload" name="addObservationFileUpload" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white"><br>
+                      </div>
+                  </div>                  
+                </div>
+              </div>
+              <div class="u-container-style u-tab-pane" id="tab-occurence" role="tabpanel" aria-labelledby="link-tab-occurence">
+                <div class="u-container-layout u-container-layout-2">
+                  <div class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form u-form u-form-1">
+                      <div class="u-form-group u-form-name">
+                        <label for="addObservationIndividualCount" class="u-form-control-hidden u-label"></label>
+                        <input type="number" min="0" oninput="this.value = Math.abs(this.value)" placeholder="Individual count" id="addObservationIndividualCount" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" autofocus="autofocus">
+                      </div>
+                      <div class="u-form-group u-form-select u-form-group-2">
+                        <label for="addObservationSex" class="u-form-control-hidden u-label"></label>
+                        <div class="u-form-select-wrapper">
+                          <select id="addObservationSex" name="select" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="required">
+                            <option value="Select Sex">Select Sex</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Not sure">Not sure</option>
+                          </select>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                        </div>
+                      </div>
+                      <div class="u-form-group u-form-select u-form-group-3">
+                        <label for="addObservationLifeStage" class="u-form-control-hidden u-label"></label>
+                        <div class="u-form-select-wrapper">
+                          <select id="addObservationLifeStage" name="Lifestage" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="required">
+                            <option value="Select Life Stage">Select Life Stage</option>
+                            <option value="Infant">Infant</option>
+                            <option value="Young">Young</option>
+                            <option value="Adult">Adult</option>
+                            <option value="Old">Old</option>
+                          </select>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                        </div>
+                      </div>
+                      <div class="u-form-group u-form-select u-form-group-4">
+                        <label for="addObservationReproductiveCondition" class="u-form-control-hidden u-label"></label>
+                        <div class="u-form-select-wrapper">
+                          <select id="addObservationReproductiveCondition" name="Reproductive Condition" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                            <option value="Select Reproductive Condition">Select Reproductive Condition</option>
+                            <option value="Fertile">Fertile</option>
+                          </select>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                        </div>
+                      </div>
+                      <div class="u-form-group u-form-select u-form-group-5">
+                        <label for="addObservationBehaviour" class="u-form-control-hidden u-label"></label>
+                        <div class="u-form-select-wrapper">
+                          <select id="addObservationBehaviour" name="Behaviour" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                            <option value="Select Behaviour">Select Behaviour</option>
+                            <option value="Aggressive">Aggressive</option>
+                            <option value="Quite">Quite</option>
+                          </select>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                        </div>
+                      </div>
+                      <div class="u-form-group u-form-textarea u-form-group-6">
+                        <label for="addObservationRemarks" class="u-form-control-hidden u-label"></label>
+                        <textarea rows="4" cols="50" id="addObservationRemarks" name="textarea" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" placeholder="Remarks"></textarea>
+                      </div>
+                  </div>                  
+                </div>
+              </div>
+              <div class="u-container-style u-tab-pane" id="tab-event" role="tabpanel" aria-labelledby="link-tab-event">
+                <div class="u-container-layout u-container-layout-3">
+                  <div class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form u-form u-form-2">
+                      <div class="u-form-group u-form-name">
+                        <label for="name-e1cb" class="u-form-control-hidden u-label"></label>
+                        <input type="text" placeholder="Habitat" id="name-e1cb" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+                      </div>
+                      <div class="u-form-group u-form-message">
+                        <label for="message-e1cb" class="u-form-control-hidden u-label"></label>
+                        <textarea placeholder="Remarks" rows="4" cols="50" id="message-e1cb" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
+                      </div>
+                      <div class="u-form-group u-form-select u-form-group-10">
+                        <label for="select-37f5" class="u-form-control-hidden u-label"></label>
+                        <div class="u-form-select-wrapper">
+                          <select id="select-37f5" name="select" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                            <option value="Protocol 1">Protocol 1</option>
+                            <option value="Protocol 2">Protocol 2</option>
+                          </select>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="u-container-style u-tab-pane" id="tab-identification" role="tabpanel" aria-labelledby="link-tab-identification">
+                <div class="u-container-layout u-container-layout-4">
+                  <div class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form u-form u-form-3">
+                    <!-- <form action="#" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form-3" style="padding: 10px;"> -->
+                      <div class="u-form-group u-form-name">
+                        <label for="name-9f55" class="u-form-control-hidden u-label"></label>
+                        <input type="text" placeholder="Reference" id="name-9f55" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                      </div>
+                      <div class="u-form-group u-form-textarea u-form-group-13">
+                        <label for="textarea-e082" class="u-form-control-hidden u-label"></label>
+                        <textarea rows="4" cols="50" id="textarea-e082" name="textarea" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" placeholder="Remarks"></textarea>
+                      </div>
+                      <!-- <div class="u-align-left u-form-group u-form-submit">
+                        <a href="#" class="u-btn u-btn-submit u-button-style">Submit</a>
+                        <input type="submit" value="submit" class="u-form-control-hidden">
+                      </div>
+                      <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
+                      <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then try again. </div>
+                      <input type="hidden" value="" name="recaptchaResponse"> -->
+                    <!-- </form> -->
+                  </div>
+                </div>
+              </div>
+              <div class="u-container-style u-tab-pane" id="tab-taxonomy" role="tabpanel" aria-labelledby="link-tab-taxonomy">
+                <div class="u-container-layout u-container-layout-5">
+                  <div class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form u-form u-form-4">
+                    <!-- <form action="#" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form-4" style="padding: 10px;"> -->
+                      <div class="u-form-group u-form-name">
+                        <label for="name-1c90" class="u-form-control-hidden u-label"></label>
+                        <input type="text" placeholder="Scientific Name" id="name-1c90" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+                      </div>
+                      <div class="u-form-email u-form-group">
+                        <label for="email-1c90" class="u-form-control-hidden u-label"></label>
+                        <input type="email" placeholder="Name According To" id="email-1c90" name="email" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+                      </div>
+                      <div class="u-form-group u-form-group-17">
+                        <label for="text-58fc" class="u-form-control-hidden u-label"></label>
+                        <input type="text" placeholder="Name Published In" id="text-58fc" name="text" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                      </div>
+                      <div class="u-form-group u-form-message">
+                        <label for="message-1c90" class="u-form-control-hidden u-label"></label>
+                        <textarea placeholder="Remarks" rows="4" cols="50" id="message-1c90" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
+                      </div>
+                      <!-- <div class="u-align-left u-form-group u-form-submit">
+                        <a href="#" class="u-btn u-btn-submit u-button-style">Submit</a>
+                        <input type="submit" value="submit" class="u-form-control-hidden">
+                      </div>
+                      <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
+                      <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then try again. </div>
+                      <input type="hidden" value="" name="recaptchaResponse"> -->
+                    <!-- </form> -->
+                  </div>
+                </div>
+              </div>
+              <div class="u-container-style u-tab-pane" id="tab-location" role="tabpanel" aria-labelledby="link-tab-location">
+                <div class="u-container-layout u-container-layout-6">
+                  <p class="u-large-text u-text u-text-default u-text-variant u-text-1">Tell us where did you see this species</p>
+                  <div class="u-expanded-width u-grey-light-2 u-map u-map-1">
+                    <!-- <div class="embed-responsive"> -->
+                      <div id="captureLocationMap" class="captureLocationMapClass"></div>
+                      <!-- <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=14.449220895767214%2C-8.163704042926296%2C127.47656464576723%2C46.84812804619434&amp;layer=mapnik" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/#map=4/21.93/70.96">View Larger Map</a></small> -->
+                    <!-- </div> -->
+                  </div>
+                  <div class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form u-form u-form-5">
+                      
+                      <div class="u-form-group u-form-name">
+                        <label for="addObservationLatitude" class="u-form-control-hidden u-label"></label>
+                        <input type="text" placeholder="Latitude" id="addObservationLatitude" name="addObservationLatitude" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+                      </div>
+                      <div class="u-form-group u-form-group">
+                        <label for="addObservationLongitude" class="u-form-control-hidden u-label"></label>
+                        <input type="text" placeholder="Longitude" id="addObservationLongitude" name="addObservationLongitude" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+                      </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </form>
+          <!-- <a id="submitObservationFormButtonOld" href="#" onClick="return false;" class="u-align-right u-btn u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-btn-2">save</a> -->
+          <input id="submitObservationFormButton" type="button" value="Save" class="u-align-right custom-btn u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-btn-2"></input>
+        </div>
+        <button class="u-dialog-close-button u-icon u-text-grey-50 u-icon-1">
+          <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 409.806 409.806" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-4e2d"></use></svg>
+          <svg class="u-svg-content" viewBox="0 0 409.806 409.806" x="0px" y="0px" id="svg-4e2d" style="enable-background:new 0 0 409.806 409.806;"><g><g><path d="M228.929,205.01L404.596,29.343c6.78-6.548,6.968-17.352,0.42-24.132c-6.548-6.78-17.352-6.968-24.132-0.42    c-0.142,0.137-0.282,0.277-0.42,0.42L204.796,180.878L29.129,5.21c-6.78-6.548-17.584-6.36-24.132,0.42    c-6.388,6.614-6.388,17.099,0,23.713L180.664,205.01L4.997,380.677c-6.663,6.664-6.663,17.468,0,24.132    c6.664,6.662,17.468,6.662,24.132,0l175.667-175.667l175.667,175.667c6.78,6.548,17.584,6.36,24.132-0.42    c6.387-6.614,6.387-17.099,0-23.712L228.929,205.01z"></path>
+            </g>
+            </g>
+          </svg>
+        </button>
+      </div>
+    </section>
+    
+
+<style>
+
+.captureLocationMapClass {
+  width: 100%;
+  height:280px;
+}
+
+.custom-btn {
+  width: 103px;
+  height: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.custom-btn:hover, .custom-btn:focus {
+    text-decoration: none;
+    color: #0676a4;
+}
+
+.u-section-7 {
+  min-height: 866px;
+}
+
+.u-section-7 .u-dialog-1 {
+  width: 995px;
+  min-height: 701px;
+  background-image: none;
+  margin: 43px auto 60px;
+}
+
+.u-section-7 .u-container-layout-1 {
+  padding: 46px 30px;
+}
+
+.u-section-7 .u-tabs-1 {
+  min-height: 480px;
+  margin-top: 0;
+  margin-bottom: 0;
+  height: auto;
+}
+
+.u-section-7 .u-tab-link-1 {
+  background-image: none;
+}
+
+.u-section-7 .u-tab-link-2 {
+  background-image: none;
+}
+
+.u-section-7 .u-tab-link-3 {
+  background-image: none;
+}
+
+.u-section-7 .u-tab-link-4 {
+  background-image: none;
+}
+
+.u-section-7 .u-tab-link-5 {
+  background-image: none;
+}
+
+.u-section-7 .u-container-layout-2 {
+  padding: 30px;
+}
+
+.u-section-7 .u-form-1 {
+  height: 447px;
+  width: 875px;
+  margin: 0;
+}
+
+.u-section-7 .u-form-group-2 {
+  margin-left: 0;
+}
+
+.u-section-7 .u-form-group-3 {
+  margin-left: 0;
+}
+
+.u-section-7 .u-form-group-4 {
+  margin-left: 0;
+}
+
+.u-section-7 .u-form-group-5 {
+  margin-left: 0;
+}
+
+.u-section-7 .u-form-group-6 {
+  margin-left: 0;
+}
+
+.u-section-7 .u-btn-2 {
+  border-style: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 11px 0 0 auto;
+}
+
+.u-section-7 .u-container-layout-3 {
+  padding: 30px;
+}
+
+.u-section-7 .u-form-2 {
+  height: 318px;
+  width: 875px;
+  margin: 0;
+}
+
+.u-section-7 .u-form-group-10 {
+  margin-left: 0;
+}
+
+.u-section-7 .u-container-layout-4 {
+  padding: 30px;
+}
+
+.u-section-7 .u-form-3 {
+  height: 318px;
+  width: 875px;
+  margin: 0;
+}
+
+.u-section-7 .u-form-group-13 {
+  margin-left: 0;
+}
+
+.u-section-7 .u-container-layout-5 {
+  padding: 30px;
+}
+
+.u-section-7 .u-form-4 {
+  height: 318px;
+  width: 875px;
+  margin: 0;
+}
+
+.u-section-7 .u-form-group-17 {
+  margin-left: 0;
+}
+
+.u-section-7 .u-container-layout-6 {
+  padding: 30px;
+}
+
+.u-section-7 .u-form-5 {
+  height: 318px;
+  width: 875px;
+  margin: 0;
+}
+
+.u-section-7 .u-icon-1 {
+  width: 16px;
+  height: 16px;
+  left: auto;
+  top: 14px;
+  position: absolute;
+  right: 14px;
+}
+
+@media (max-width: 1199px) {
+  .u-section-7 .u-dialog-1 {
+    width: 940px;
+    height: auto;
+  }
+
+  .u-section-7 .u-form-1 {
+    width: 820px;
+  }
+
+  .u-section-7 .u-form-2 {
+    width: 820px;
+  }
+
+  .u-section-7 .u-form-3 {
+    width: 820px;
+  }
+
+  .u-section-7 .u-form-4 {
+    width: 820px;
+  }
+
+  .u-section-7 .u-form-5 {
+    width: 820px;
+  }
+}
+
+@media (max-width: 991px) {
+  .u-section-7 .u-dialog-1 {
+    width: 720px;
+    margin-top: 138px;
+  }
+
+  .u-section-7 .u-container-layout-1 {
+    padding-top: 29px;
+    padding-bottom: 30px;
+  }
+
+  .u-section-7 .u-form-1 {
+    width: 600px;
+  }
+
+  .u-section-7 .u-form-2 {
+    width: 600px;
+  }
+
+  .u-section-7 .u-form-3 {
+    width: 600px;
+  }
+
+  .u-section-7 .u-form-4 {
+    width: 600px;
+  }
+
+  .u-section-7 .u-form-5 {
+    width: 600px;
+  }
+}
+
+@media (max-width: 767px) {
+  .u-section-7 .u-dialog-1 {
+    width: 540px;
+    margin-top: 124px;
+  }
+
+  .u-section-7 .u-container-layout-1 {
+    padding-top: 45px;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .u-section-7 .u-container-layout-2 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .u-section-7 .u-form-1 {
+    width: 500px;
+  }
+
+  .u-section-7 .u-container-layout-3 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .u-section-7 .u-form-2 {
+    width: 500px;
+  }
+
+  .u-section-7 .u-container-layout-4 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .u-section-7 .u-form-3 {
+    width: 500px;
+  }
+
+  .u-section-7 .u-container-layout-5 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .u-section-7 .u-form-4 {
+    width: 500px;
+  }
+
+  .u-section-7 .u-container-layout-6 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .u-section-7 .u-form-5 {
+    width: 500px;
+  }
+}
+
+@media (max-width: 575px) {
+  .u-section-7 .u-dialog-1 {
+    width: 340px;
+    margin-top: 33px;
+    margin-bottom: 57px;
+  }
+
+  .u-section-7 .u-container-layout-1 {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .u-section-7 .u-form-1 {
+    width: 300px;
+  }
+
+  .u-section-7 .u-form-2 {
+    width: 300px;
+  }
+
+  .u-section-7 .u-form-3 {
+    width: 300px;
+  }
+
+  .u-section-7 .u-form-4 {
+    width: 300px;
+  }
+
+  .u-section-7 .u-form-5 {
+    width: 300px;
+  }
+}</style><section class="u-black u-clearfix u-container-style u-dialog-block u-opacity u-opacity-70 u-section-8" id="addChecklistModal">
+      <div class="u-align-left u-container-style u-dialog u-white u-dialog-1">
+        <div class="u-container-layout u-container-layout-1">
+          <h3 class="u-align-left u-text u-text-default u-text-1">Add Checklist</h3>
+          <div id="createCheckListForm" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form u-form u-form-1">
+            <!-- <form action="#" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form-1" style="padding: 10px;"> -->
+              <div class="u-form-group u-form-name">
+                <label for="name-4b26" class="u-form-control-hidden u-label"></label>
+                <input id="createCheckListName" type="text" placeholder="Checklist name" id="name-4b26" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+              </div>
+              <div class="u-form-group u-form-message">
+                <label for="message-4b26" class="u-form-control-hidden u-label"></label>
+                <textarea id="createCheckListDescription" placeholder="Description" rows="4" cols="50" id="message-4b26" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
+              </div>
+              <div class="u-form-checkbox u-form-group u-form-group-3">
+                <input type="checkbox" id="createCheckListIsGroupYes" name="checkbox" value="On">
+                <label for="checkbox-a434" class="u-label">Is Group</label>
+              </div>
+              <div class="u-form-group u-form-group-4">
+                <label for="text-16fe" class="u-form-control-hidden u-label"></label>
+                <input id="createCheckListGroupCount" type="number" placeholder="Group count" id="text-16fe" name="text" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+              </div>
+              <div class="u-form-group u-form-select u-form-group-5">
+                <label for="select-d578" class="u-form-control-hidden u-label"></label>
+                <div class="u-form-select-wrapper">
+                  <select id="createCheckListTravelMode" name="select" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                    <option value="Walking">Walking</option>
+                    <option value="Bike">Bike</option>
+                    <option value="Car">Car</option>
+                    <option value="Bus">Bus</option>
+                    <option value="Train">Train</option>
+                    <option value="Air">Air</option>
+                    <option value="Boat">Boat</option>
+                  </select>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                </div>
+              </div>
+              <div class="u-align-left u-form-group u-form-submit">
+                <a href="#" onclick="saveCheckListData()" class="u-btn u-btn-submit u-button-style">Add</a>
+                <input type="button" value="Add" class="u-form-control-hidden">
+              </div>
+              <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
+              <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then try again. </div>
+              <input type="hidden" value="" name="recaptchaResponse">
+            <!-- </form> -->
+          </div>
+        </div><button class="u-dialog-close-button u-icon u-text-grey-40 u-icon-1"><svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 16 16" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-efe9"></use></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xml:space="preserve" class="u-svg-content" viewBox="0 0 16 16" x="0px" y="0px" id="svg-efe9"><rect x="7" y="0" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -3.3138 8.0002)" width="2" height="16"></rect><rect x="0" y="7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -3.3138 8.0002)" width="16" height="2"></rect></svg></button>
+      </div>
+    </section><style> .u-section-8 {
+  min-height: 866px;
+}
+
+.u-section-8 .u-dialog-1 {
+  width: 800px;
+  min-height: 701px;
+  margin: 60px auto;
+}
+
+.u-section-8 .u-container-layout-1 {
+  padding: 30px;
+}
+
+.u-section-8 .u-text-1 {
+  margin: 35px auto 0 0;
+}
+
+.u-section-8 .u-form-1 {
+  height: 318px;
+  width: 740px;
+  margin: 35px 0 0;
+}
+
+.u-section-8 .u-form-group-3 {
+  margin-left: 0;
+}
+
+.u-section-8 .u-form-group-4 {
+  margin-left: 0;
+}
+
+.u-section-8 .u-form-group-5 {
+  margin-left: 0;
+}
+
+.u-section-8 .u-icon-1 {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 1199px) {
+  .u-section-8 .u-dialog-1 {
+    height: auto;
+  }
+}
+
+@media (max-width: 991px) {
+  .u-section-8 .u-dialog-1 {
+    width: 720px;
+  }
+
+  .u-section-8 .u-form-1 {
+    width: 660px;
+  }
+}
+
+@media (max-width: 767px) {
+  .u-section-8 .u-dialog-1 {
+    width: 540px;
+  }
+
+  .u-section-8 .u-container-layout-1 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .u-section-8 .u-form-1 {
+    width: 520px;
+  }
+}
+
+@media (max-width: 575px) {
+  .u-section-8 .u-dialog-1 {
+    width: 340px;
+  }
+
+  .u-section-8 .u-form-1 {
+    width: 320px;
+  }
+}</style></body>
+</html>

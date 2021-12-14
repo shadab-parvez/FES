@@ -1,0 +1,99 @@
+.checkListContainer-container {
+    display: flex;
+    border: 1px solid #afafaf;
+    width: 600px;
+    height: 600px;
+}
+
+.right-border {
+    border-right: 1px solid #afafaf;
+}
+
+.checkList-child {
+    flex: 1;
+}  
+
+.checkList-child:first-child {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.checklist-items {
+    height: 500px;
+    overflow: auto;
+}
+
+dt{
+    margin-top: 15px;
+}
+
+dd {
+    margin: 5px 0px 5px 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.padding-top-50 {
+    padding-top: 50px;
+}
+
+.input-text, .input-number {
+    background-color: white;
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding-left: 10px;
+    height: 30px;
+    width: 90%;
+    margin-top: 10px;
+    border: 1px solid #afafaf;
+}
+
+.textarea {
+    resize: none;
+    background-color: white;
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding-left: 10px;
+    height: 90px;
+    width: 90%;
+    margin-top: 10px;
+    border: 1px solid #afafaf;
+}
+
+.textarea::-webkit-input-placeholder {
+    font-family: Arial;
+}
+
+.input-text:focus {
+    border: 2px solid #afafaf;
+}
+
+.input-button {
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px 0px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: #008CBA;
+}
+
+.input-button:hover {
+    background-color: #00afe9; /* Green */
+    color: white;
+}
+
+.add-observation-button {
+    padding: 2px 8px;
+    float: right;
+    background-color: #008cba;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

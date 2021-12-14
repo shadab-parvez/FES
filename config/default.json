@@ -1,0 +1,24 @@
+{
+    "Staging": {
+      "dbConfig": {
+        "host": "localhost",
+        "database": "fes",
+        "user": "postgres",
+        "password": "postgres",
+        "port": 5432
+      },
+      "fileUploadPath": "C:/work/projects/FES/uploads/",
+      "fileUploadVirtualPath": "/uploads/"
+    },
+    "Production": {
+        "dbConfig": {
+          "host": "localhost",
+          "database": "fes",
+          "user": "postgres",
+          "password": "postgres",
+          "port": 5432
+        },
+        "fileUploadPath": "C:/work/projects/FES/uploads/",
+        "fileUploadVirtualPath": "/uploads/"
+      }
+  }
