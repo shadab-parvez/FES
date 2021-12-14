@@ -26,10 +26,49 @@ const showObservationDialogBox = (id) => {
 const submitObservationForm = () => {
     
     $('#submitObservationFormButton').click(function(e) {
-        if($("#addObservationFileUpload").val() == ""){
-            alert('PLease select a file to upload');
+        if($("#addObservationSpeciesCount").val() == "") {
+            showErrorMessage('Please enter a value for species count');
             return;
         }
+        if($("#addObservationSpeciesName").val() == "") {
+            showErrorMessage('Please select species name');
+            return;
+        }
+        if($("#addObservationSpeciesGender").val() == "") {
+            showErrorMessage("Please select specie's gender");
+            return;
+        }
+        if($("#addObservationMaleCount").val() == "") {
+            showErrorMessage('Please enter the number of males');
+            return;
+        }
+        if($("#addObservationFemaleCount").val() == "") {
+            showErrorMessage('Please enter the number of females');
+            return;
+        }
+        if($("#addObservationChildCount").val() == "") {
+            showErrorMessage('Please enter the number of children');
+            return;
+        }
+        if($("#addObservationLatitude").val() == "") {
+            showErrorMessage('Please enter the latitude');
+            return;
+        }
+        if($("#addObservationLongitude").val() == "") {
+            showErrorMessage('Please enter the longitude');
+            return;
+        }
+        if($("#addObservationFileUpload").val() == "") {
+            showErrorMessage('Please select a file to upload');
+            return;
+        }
+
+        // Ocurence Check
+        if($("#addObservationIndividualCount").val() == "") {
+            showErrorMessage('Please enter the individual count');
+            return;
+        }
+        
 
         e.preventDefault();
         var formData = new FormData($('#addObservationForm')[0]);
@@ -42,7 +81,7 @@ const submitObservationForm = () => {
             processData: false,            
             success: function(d) {
                 if(d.status == "SUCCESS") {
-                    alert('Observation successfuly added');
+                    showSuccessMessage('Observation successfuly added');
                     resetAddObservationForm();
 
                     $('#addObservationDialogBox').removeClass('u-dialog-open');
@@ -128,12 +167,12 @@ const saveObservation = () => {
 			setValue('createCheckListIsGroupYes', '');
 			setValue('createCheckListGroupCount', '');
 			setValue('createCheckListTravelMode', '');
-			alert('Checklist ' + name + ' created.');
+			showSuccessMessage('Checklist ' + name + ' created.');
 			$('#addChecklistModal').removeClass('u-dialog-open');
 			getChecklists();
 		}
 		if(data == "exists") {
-			alert('There exists a checklist by this name. Use a different checklist name.');
+			showErrorMessage('There exists a checklist by this name. Use a different checklist name.');
 		}
 	})
 

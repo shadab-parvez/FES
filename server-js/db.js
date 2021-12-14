@@ -68,6 +68,13 @@ const addObservation = (request, response) => {
     console.log(request.body.addObservationLatitude)
     console.log(request.body.addObservationLongitude)
 
+    console.log(request.body.addObservationIndividualCount)
+    console.log(request.body.addObservationSex)
+    console.log(request.body.addObservationLifeStage)
+    console.log(request.body.addObservationReproductiveCondition)
+    console.log(request.body.addObservationBehaviour)
+    console.log(request.body.addObservationRemarks)
+
     addObservationFileUpload = request.files.addObservationFileUpload;
     var uploadFileArray = [];
     var uploadPathArray = [];
@@ -104,7 +111,8 @@ const addObservation = (request, response) => {
 
     pool.connect()
     .then(client => {
-        return client.query("SELECT * FROM sp_addObservation($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)", 
+        return client.query("SELECT * FROM sp_addObservation($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, " 
+        + "$11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27)",
         [request.body.addObservationCheckListId,
             request.body.addObservationCheckListName,
             request.body.addObservationSpeciesCount,
@@ -119,7 +127,25 @@ const addObservation = (request, response) => {
             "CC License",
             uploadPathArray,
             uploadVirtualPathArray,
-            uploadExtensionArray])
+            uploadExtensionArray,
+            
+            // For Occurence Table
+            request.body.addObservationIndividualCount,
+            request.body.addObservationLifeStage,
+            request.body.addObservationReproductiveCondition,
+            request.body.addObservationBehaviour,
+            uploadVirtualPathArray.join("|"),
+            request.body.addObservationRemarks,
+            
+            // For Location Table
+            request.body.addObservationMinimumElevationInMeters,
+            request.body.addObservationMaximumElevationInMeters,
+            request.body.addObservationLocationRemarks,
+            request.body.addObservationGeodeticDatum,
+            request.body.addObservationCoordinateUncertainityInMeters, 
+            request.body.addObservationCoordinatePrecision]
+
+            )
             .then(res => {
                 client.release();
                 console.log(res.rows);

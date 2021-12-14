@@ -23,7 +23,7 @@ const saveCheckListData = () => {
 	console.log(data)
 	if(data.name == "" || data.description == "" || data.is_group == "" || data.travel_mode == "")
 	{
-		alert("Please fill all values");
+		showErrorMessage('Please fill all values');
 		return;
 	}
 	fetch(addCheckListUrl,
@@ -43,12 +43,12 @@ const saveCheckListData = () => {
 			setValue('createCheckListIsGroupYes', '');
 			setValue('createCheckListGroupCount', '');
 			setValue('createCheckListTravelMode', '');
-			alert('Checklist ' + name + ' created.');
+			showSuccessMessage('Checklist ' + name + ' created.');
 			$('#addChecklistModal').removeClass('u-dialog-open');
 			getChecklists();
 		}
 		if(data == "exists") {
-			alert('There exists a checklist by this name. Use a different checklist name.');
+			showErrorMessage('There exists a checklist by this name. Use a different checklist name.');
 		}
 	})
 }
