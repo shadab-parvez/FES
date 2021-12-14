@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="nicepage.css" media="screen">
     <link rel="stylesheet" href="view-observation.css" type="text/css">
 <link rel="stylesheet" href="Gallery.css" media="screen">
-    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
+    <script class="u-script" type="text/javascript" src="jquery-3.6.0.min.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
     <script src="urls.js"></script>
 	<script class="u-script" type="text/javascript" src="view-observation.js" defer=""></script>
@@ -32,6 +32,15 @@
     <meta property="og:type" content="website">
   </head>
   <body onload="initOpenLayers()" class="u-body">
+
+    <section class="u-align-center u-clearfix u-section-3" id="sec-c10b">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <h2 id="speciesName" class="u-text u-text-default u-text-1">Species Name</h2>
+        <p class="u-text u-text-2">Vernacular Name in English | Observed in Asia</p>
+        <p class="u-text u-text-2">Published by Author Name</p>
+      </div>
+    </section>
+
     <section class="u-clearfix u-grey-light-2 u-typography-custom-page-typography-12--Map u-section-1" id="sec-10e3">
       <div class="u-expanded u-grey-light-2 u-map">
         <div class="embed-responsive">
@@ -54,25 +63,7 @@
                 <div class="u-container-style u-layout-cell u-left-cell u-size-60 u-layout-cell-1" src="">
                   <div class="u-container-layout u-container-layout-1">
                     <div class="u-carousel u-expanded-width u-gallery u-layout-thumbnails u-lightbox u-no-transition u-show-text-always u-gallery-1" data-interval="5000" data-u-ride="carousel" id="carousel-a197">
-                      <div class="u-carousel-inner u-gallery-inner" role="listbox">
-                        <div class="u-active u-carousel-item u-gallery-item u-carousel-item-1">
-                          <div class="u-back-slide">
-                            <img class="u-back-image u-expanded" src="images/default-image.jpg">
-                          </div>
-                          <div class="u-over-slide u-over-slide-1">
-                            <h3 class="u-gallery-heading">Sample Title</h3>
-                            <p class="u-gallery-text">Sample Text</p>
-                          </div>
-                        </div>
-                        <div class="u-carousel-item u-gallery-item u-carousel-item-2">
-                          <div class="u-back-slide">
-                            <img class="u-back-image u-expanded" src="images/default-image.jpg">
-                          </div>
-                          <div class="u-over-slide u-over-slide-2">
-                            <h3 class="u-gallery-heading">Sample Title</h3>
-                            <p class="u-gallery-text">Sample Text</p>
-                          </div>
-                        </div>
+                      <div id="imageSourceCarousalItem" class="u-carousel-inner u-gallery-inner" role="listbox">
                       </div>
                       <a class="u-carousel-control u-carousel-control-prev u-grey-70 u-icon-circle u-opacity u-opacity-70 u-spacing-10 u-text-white u-carousel-control-1" href="#carousel-a197" role="button" data-u-slide="prev">
                         <span aria-hidden="true">
@@ -98,13 +89,7 @@ L278.318,225.92L106.409,54.017c-12.354-12.359-12.354-32.394,0-44.748c12.354-12.3
 c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,248.292z"></path></svg>
                         </span>
                       </a>
-                      <ol class="u-carousel-thumbnails u-spacing-10 u-carousel-thumbnails-1">
-                        <li class="u-active u-carousel-thumbnail u-carousel-thumbnail-1" data-u-target="#carousel-a197" data-u-slide-to="0">
-                          <img class="u-carousel-thumbnail-image u-image" src="images/default-image.jpg">
-                        </li>
-                        <li class="u-carousel-thumbnail u-carousel-thumbnail-2" data-u-target="#carousel-a197" data-u-slide-to="1">
-                          <img class="u-carousel-thumbnail-image u-image" src="images/default-image.jpg">
-                        </li>
+                      <ol id="imageSource" class="u-carousel-thumbnails u-spacing-10 u-carousel-thumbnails-1">
                       </ol>
                     </div>
                   </div>
@@ -118,46 +103,29 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                     <div class="u-align-left u-container-style u-layout-cell u-size-30 u-layout-cell-2">
                       <div class="u-container-layout u-container-layout-2">
                         <div class="u-expanded-width u-table u-table-responsive u-table-1">
-                          <table class="u-table-entity">
-                            <colgroup>
-                              <col width="48.3%">
-                              <col width="51.7%">
-                            </colgroup>
-                            <tbody class="u-table-body">
-                              <tr style="height: 45px;">
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
+                          
+                          <h2>Record</h2>
+                          <table class="table">
+                            <tbody>
+                              <tr>
+                                <td>Basis of record</td>
+                                <td id="basisOfRecord"></td>
                               </tr>
-                              <tr style="height: 45px;">
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
+                              <tr>
+                                <td>Collection code</td>
+                                <td id="collectionCode"></td>
                               </tr>
-                              <tr style="height: 45px;">
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
+                              <tr>
+                                <td>Dynamic properties</td>
+                                <td id="dynamicProperties"></td>
                               </tr>
-                              <tr style="height: 45px;">
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                              </tr>
-                              <tr style="height: 45px;">
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                              </tr>
-                              <tr style="height: 45px;">
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                              </tr>
-                              <tr style="height: 45px;">
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                              </tr>
-                              <tr style="height: 45px;">
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
-                                <td class="u-border-1 u-border-grey-dark-1 u-table-cell"></td>
+                              <tr>
+                                <td>Institution code</td>
+                                <td id="institutionCode"></td>
                               </tr>
                             </tbody>
                           </table>
+
                         </div>
                       </div>
                     </div>
@@ -184,17 +152,6 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
     </section>
     
     
-    <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-80a8"><div class="u-align-left u-clearfix u-sheet u-sheet-1"></div></footer>
-    <section class="u-backlink u-clearfix u-grey-80">
-      <a class="u-link" href="https://nicepage.com/website-design" target="_blank">
-        <span>Website Design</span>
-      </a>
-      <p class="u-text">
-        <span>created with</span>
-      </p>
-      <a class="u-link" href="https://nicepage.com/wysiwyg-html-editor" target="_blank">
-        <span>Best HTML editor</span>
-      </a>. 
-    </section>
+
   </body>
 </html>

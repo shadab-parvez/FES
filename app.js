@@ -47,6 +47,10 @@ app.post('/getObservations', function(request, response) {
     db.getObservations(request, response)
 });
 
+app.post('/getObservationDetails', function(request, response) {
+    db.getObservationDetails(request, response)
+});
+
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, '/html/index.html'));
 });

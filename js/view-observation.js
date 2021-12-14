@@ -1,5 +1,6 @@
 var geomArray = [];
 var map;
+var geojsonObject;
 const initOpenLayers =() => {
     var attribution = new ol.control.Attribution({
         collapsible: false
@@ -18,21 +19,37 @@ const initOpenLayers =() => {
             zoom: 2
         })
     });
-    getObservations();
+
+    var url_string = window.location.href
+    var url = new URL(url_string);
+    var checklistid = url.searchParams.get("checklistid");
+    console.log(checklistid);
+    if(checklistid == "")
+        getObservations();
+    else
+        getObservations(checklistid);
 }
 
 
-const getObservations = () => {
+const getObservations = (checkListId) => {
 
     map.getLayers().forEach(function (layer) {
         if(layer.get('name') == "myObservations") {
             map.removeLayer(layer);
         }
     });
+    var data;
 
-    var data = {
-        user_id: 'UserId_1'
-    };
+    if(checkListId == "")
+        data = {
+            user_id: 'UserId_1',
+            checkListId: ""
+        };
+    else
+        data = {
+            user_id: 'UserId_1',
+            checkListId: checkListId
+        };
     fetch(getObservationUrl,
     {
         method: "POST",
@@ -44,7 +61,7 @@ const getObservations = () => {
     .then(function(res) { return res.json(); })
     .then(function(data) {
         geomArray = [];
-        const geojsonObject = {
+        geojsonObject = {
             'type': 'FeatureCollection',
             'crs': {
               'type': 'name',
@@ -107,7 +124,7 @@ const getObservations = () => {
             return false;
         };
 
-        map.on('click', function(evt){
+        map.on('click', function(evt) {
             var feature = map.forEachFeatureAtPixel(evt.pixel,
               function(feature, layer) {
                 return feature;
@@ -116,6 +133,9 @@ const getObservations = () => {
                 var geometry = feature.getGeometry();
                 var coord = geometry.getCoordinates();
                 
+                getObservationDetails(feature.get('observation_id'));
+                return;
+
                 var content = '<h3>' + feature.get('collection_code') + '</h3>';
                 content += '<table><thead><tr><th>Property</th><th>Value</th></tr></thead>';
                 content += '<tbody><tr><td>Dataset name</td><td>' + feature.get('dataset_name') + '</td></tr>';
@@ -136,11 +156,11 @@ const getObservations = () => {
                 content += '<tbody><tr><td>Rights holder</td><td>' + feature.get('rights_holder') + '</td></tr>';
                 content += '<tbody><tr><td>Species count</td><td>' + feature.get('species_count') + '</td></tr>';
                 content += '<tbody><tr><td>Type</td><td>' + feature.get('type') + '</td></tr>';
-                content += '<tbody><tr><td>URL</td><td>' + feature.get('file_uri') + '</td></tr>';
+                //content += '<tbody><tr><td>URL</td><td>' + feature.get('file_uri') + '</td></tr>';
                 content += '</tbody></table>';
                 
 
-                content += '<div class="u-gallery u-layout-grid u-lightbox u-no-transition u-show-text-on-hover u-gallery-1">'
+                /* content += '<div class="u-gallery u-layout-grid u-lightbox u-no-transition u-show-text-on-hover u-gallery-1">'
                 + '<div class="u-gallery-inner u-gallery-inner-1">'
                 + '<div class="u-effect-fade u-gallery-item">'
                 + '<div class="u-back-slide">'
@@ -153,7 +173,7 @@ const getObservations = () => {
                 + '</div>'
                 
                 + '</div>'
-                + '</div>'
+                + '</div>' */
 
                 //$("#details").append(content);
                 content_element.innerHTML = content;
@@ -176,5 +196,46 @@ const getObservations = () => {
     });
 }
 
+const getObservationDetails = (observationId) => {
+
+    var data = {
+        observationId
+    }
+    fetch(getObservationDetailsUrl,
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+            },
+        body: JSON.stringify(data)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        console.log(data[0].json_row);
+        
+        //$("#speciesName").html("Species Name");//data[0].json_row.collection_code);
+
+        $("#basisOfRecord").html(data[0].json_row.basis_of_record);
+        $("#collectionCode").html(data[0].json_row.collection_code);
+        $("#dynamicProperties").html(data[0].json_row.dynamic_properties);
+        $("#institutionCode").html(data[0].json_row.institution_code);
+
+        $("#imageSourceCarousalItem").html(
+        + '<div class="u-active u-carousel-item u-gallery-item u-carousel-item-1">'
+        + '                  <div class="u-back-slide">'
+        + '                    <img class="u-back-image u-expanded" src="' + window.location.origin + "/" + data[0].json_row.file_uri.replace('/uploads', '') + '">'
+        + '                  </div>'
+        + '                  <div class="u-over-slide u-over-slide-1">'
+        + '                    <h3 class="u-gallery-heading">Sample Title</h3>'
+        + '                    <p class="u-gallery-text">Sample Text</p>'
+        + '                  </div>'
+        + '                </div>');
+
+        $("#imageSource").html('<li class="u-active u-carousel-thumbnail u-carousel-thumbnail-1" data-u-target="#carousel-a197" data-u-slide-to="0">'
+        + '<img class="u-carousel-thumbnail-image u-image" src="' + window.location.origin + "/" + data[0].json_row.file_uri.replace('/uploads', '') + '">'
+        +'</li>');        
+    });
+    
+}
 
 

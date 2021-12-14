@@ -69,6 +69,10 @@ const submitObservationForm = () => {
             return;
         }
         
+        if($("#addObservationIndividualCount").val() == "") {
+            showErrorMessage('Please enter the individual count');
+            return;
+        }
 
         e.preventDefault();
         var formData = new FormData($('#addObservationForm')[0]);

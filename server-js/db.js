@@ -162,11 +162,28 @@ const addObservation = (request, response) => {
 
 
 const getObservations = (request, response) => {
-    const {user_id } = request.body;
+    const {user_id, checkListId } = request.body;
     pool.connect()
     .then(client => {
-        return client.query('SELECT * FROM sp_getObservations($1)',
-        [user_id])
+        return client.query('SELECT * FROM sp_getObservations($1, $2)',
+        [user_id, checkListId])
+            .then(res => {
+                client.release();
+                response.status(201).send(res.rows)
+            })
+            .catch(e => {
+                client.release();
+                console.log(e.stack);
+            })
+    });
+}
+
+const getObservationDetails = (request, response) => {
+    const {observationId } = request.body;
+    pool.connect()
+    .then(client => {
+        return client.query('SELECT * FROM sp_getObservationDetails($1)',
+        [observationId])
             .then(res => {
                 client.release();
                 response.status(201).send(res.rows)
@@ -179,10 +196,10 @@ const getObservations = (request, response) => {
 }
 
 
-
 module.exports = {
     addCheckList,
     getChecklists,
     addObservation,
-    getObservations
+    getObservations,
+    getObservationDetails
   }
