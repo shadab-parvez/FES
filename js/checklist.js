@@ -7,6 +7,7 @@ const showChecklistEditor = () => {
 
 const init = () => {
 	submitObservationForm();
+	limitUploadFileSize();
 	getChecklists();
 	initMapClickForLocationCapture();
 }

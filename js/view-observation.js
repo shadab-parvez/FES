@@ -7,6 +7,7 @@ const initOpenLayers =() => {
     });
     map = new ol.Map({
         controls: ol.control.defaults({attribution: false}).extend([attribution]),
+        interactions: ol.interaction.defaults({mouseWheelZoom:false}),
         layers: [
             new ol.layer.Tile({
               source: new ol.source.OSM()
@@ -212,28 +213,59 @@ const getObservationDetails = (observationId) => {
     .then(function(res) { return res.json(); })
     .then(function(data) {
         console.log(data[0].json_row);
+        var obj = data[0].json_row;
         
-        //$("#speciesName").html("Species Name");//data[0].json_row.collection_code);
+        $("#occurenceTimestamp").html("Occurence " + getOccurenceDateTime(obj.date_time));
+        $("#speciesName").html("<i>" + obj.scientific_name + "</i>, " + obj.scientific_name_authorship);
+        $("#vernacularName").html("<b>" + obj.vernacular_name + "</b> in " + languageStore[obj.language] + ", observed in <b>" + obj.continent + "</b>");
+        $("#authorName").html("Published by " + obj.scientific_name_authorship);
+        
+        $("#mailCount").html(obj.male_count);
+        $("#femailCount").html(obj.female_count);
+        $("#childCount").html(obj.child_count);
+        
+        $("#taxon_id").html(obj.taxon_id);
+        $("#species").html(obj.scientific_name);
+        $("#kingdom").html(obj.kingdom);
+        $("#phylum").html(obj.phylum);
+        $("#class").html(obj.class);
+        $("#order").html(obj.order);
+        $("#family").html(obj.family);
+        $("#subfamily").html(obj.subfamily);
+        $("#genus").html(obj.genus);
 
-        $("#basisOfRecord").html(data[0].json_row.basis_of_record);
-        $("#collectionCode").html(data[0].json_row.collection_code);
-        $("#dynamicProperties").html(data[0].json_row.dynamic_properties);
-        $("#institutionCode").html(data[0].json_row.institution_code);
+        
 
-        $("#imageSourceCarousalItem").html(
-        + '<div class="u-active u-carousel-item u-gallery-item u-carousel-item-1">'
-        + '                  <div class="u-back-slide">'
-        + '                    <img class="u-back-image u-expanded" src="' + window.location.origin + "/" + data[0].json_row.file_uri.replace('/uploads', '') + '">'
-        + '                  </div>'
-        + '                  <div class="u-over-slide u-over-slide-1">'
-        + '                    <h3 class="u-gallery-heading">Sample Title</h3>'
-        + '                    <p class="u-gallery-text">Sample Text</p>'
-        + '                  </div>'
-        + '                </div>');
+        $("#basisOfRecord").html(basisOfRecordStore[obj.basis_of_record]);
+        $("#collectionCode").html(obj.collection_code);
+        $("#dynamicProperties").html(obj.dynamic_properties);
+        $("#institutionCode").html(obj.institution_code);
 
-        $("#imageSource").html('<li class="u-active u-carousel-thumbnail u-carousel-thumbnail-1" data-u-target="#carousel-a197" data-u-slide-to="0">'
-        + '<img class="u-carousel-thumbnail-image u-image" src="' + window.location.origin + "/" + data[0].json_row.file_uri.replace('/uploads', '') + '">'
-        +'</li>');        
+        $("#occurenceId").html(obj.occurence_id);
+        $("#behaviour").html(obj.behaviour);
+        $("#individualCount").html(obj.individual_count);
+        $("#recordedBy").html(obj.recorded_by);
+
+        var imageSourceCarousalItemHTML;
+        var imageSourceHTML;
+        obj.associated_media.split('|').forEach((item) => {
+            imageSourceCarousalItemHTML += '<div class="u-active u-carousel-item u-gallery-item u-carousel-item-1">'
+            + '                  <div class="u-back-slide">'
+            + '                    <img class="u-back-image u-expanded" src="' + window.location.origin + "/" + item.replace('/uploads', '') + '">'
+            + '                  </div>'
+            + '                  <div class="u-over-slide u-over-slide-1">'
+            + '                    <h3 class="u-gallery-heading">Sample Title</h3>'
+            + '                    <p class="u-gallery-text">Sample Text</p>'
+            + '                  </div>'
+            + '                </div>';
+
+            imageSourceHTML += '<li class="u-active u-carousel-thumbnail u-carousel-thumbnail-1" data-u-target="#carousel-a197" data-u-slide-to="0">'
+            + '<img class="u-carousel-thumbnail-image u-image" src="' + window.location.origin + "/" + item.replace('/uploads', '') + '">'
+            + '</li>';
+        })
+
+        $("#imageSourceCarousalItem").html(imageSourceCarousalItemHTML);
+        $("#imageSource").html(imageSourceHTML);        
     });
     
 }

@@ -9535,6 +9535,11 @@ section.u-image,
   max-width: 50%;
   min-width: 50%;
 }
+.u-layout-row > .u-size-100 {
+  flex: 0 0 50%;
+  max-width: 100%;
+  min-width: 100%;
+}
 .u-layout-col > .u-size-30 {
   flex: 30 0 50%;
 }

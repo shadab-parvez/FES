@@ -7,7 +7,10 @@ const showObservationDialogBox = (id) => {
     
     $("#link-tab").on('click', () => {
         console.log('Clicked');
-        initMapClickForLocationCapture();
+        setTimeout(() => {
+            if($("#captureLocationMap").find("canvas").attr("width") == undefined)
+                initMapClickForLocationCapture();
+        }, 300)
     });
 
     console.log(id);
@@ -21,6 +24,23 @@ const showObservationDialogBox = (id) => {
     $('#addObservationUserId').val(userId);
 
     $('#addObservationTabsHeaderList').find('a:first').click();
+}
+
+const limitUploadFileSize = () => {
+    const input = document.getElementById('addObservationFileUpload')
+    input.addEventListener('change', (event) => {
+    const target = event.target;
+        console.log(target.files[0].size);
+        if (target.files && target.files[0]) {
+            
+        /*Maximum allowed size in bytes 5MB*/
+        const maxAllowedSize = maxAllowedSizeInMB * 1024 * 1024;
+        if (target.files[0].size > maxAllowedSize) {
+            showErrorMessage('Select a file size less than ' + maxAllowedSizeInMB + ' MB');
+            target.value = ''
+        }
+    }
+    });
 }
 
 const submitObservationForm = () => {
@@ -190,10 +210,10 @@ const getSpeciesOnKeyPress = (keyword) => {
     //console.log(keyword);
     //if(keyword.length<=2)
         //return;
-        $("#addObservationSpeciesNameDropDown").show();
+    $("#addObservationSpeciesNameDropDown").show();
     $.ajax({
         type: 'GET',
-        url : 'https://api.catalogueoflife.org/dataset/2351/nameusage/suggest?fuzzy=false&limit=25&q=' + keyword,
+        url : COLSpeciesListURL + keyword,
         data: '',
         dataType: 'json',
         contentType: false,
@@ -202,7 +222,6 @@ const getSpeciesOnKeyPress = (keyword) => {
             $("#addObservationSpeciesNameDropDown").empty();
             if(d.hasOwnProperty('suggestions')) {
                 speciesSuggestionsArray = d.suggestions;
-                console.log(d.suggestions.map(({ match }) => match));
                 d.suggestions.map(({ match }) => match).forEach((matchedItem) => {
                     $("#addObservationSpeciesNameDropDown").append('<a href="#" onclick="selectSpeciesValue(this.innerHTML)">' + matchedItem + '</a>');
                 });
@@ -219,8 +238,103 @@ const selectSpeciesValue = (value) => {
     $("#addObservationSpeciesName").val(value);
     $("#addObservationSpeciesNameDropDown").hide();
 
+    //speciesSuggestionsArray[0].usageId + '/info'
+
     /* Get the COL Id and send the details */
     //https://api.catalogueoflife.org/dataset/2351/taxon/5K5LD/info
+    $.ajax({
+        type: 'GET',
+        url : COLTaxonomyURL + speciesSuggestionsArray[0].usageId + '/info',
+        data: '',
+        dataType: 'json',
+        contentType: false,
+        processData: false,            
+        success: function(d) {
+            $("#addObservationTaxonID").val(speciesSuggestionsArray[0].usageId);
+            $("#addObservationScientificNameID").val(speciesSuggestionsArray[0].usageId);
+            $("#addObservationAcceptedNameUsageID").val(speciesSuggestionsArray[0].usageId);
+            $("#addObservationScientificName").val(d.taxon.name.scientificName);
+            
+            $("#addObservationOriginalNameUsageID").val('');
+            $("#addObservationNameAccordingToID").val('');
+            $("#addObservationAcceptedNameUsage").val('');
+            $("#addObservationParentNameUsage").val('');
+            $("#addObservationOriginalNameUsage").val('');
+            $("#addObservationHigherClassification").val('');
+            
+            $("#addObservationGenericName").val(d.taxon.name.scientificName);
+            $("#addObservationSubgenus").val('');
+            $("#addObservationInfragenericEpithet").val('');
+            $("#addObservationSpecificEpithet").val(d.taxon.name.specificEpithet);
+            $("#addObservationInfraspecificEphithet").val(d.taxon.name.infraspecificEpithet);
+            $("#addObservationCultivarEpithet").val('');
+            $("#addObservationTaxonRank").val(d.taxon.name.rank);
+            $("#addObservationScientificNameAuthorship").val(d.taxon.name.authorship);
+            vernacularNamesItemsArray = [];
+            if(d.vernacularNames != undefined){
+                d.vernacularNames.forEach((vernacularNamesItem) => {
+                    vernacularNamesItemsArray.push(vernacularNamesItem.name);
+                })
+            }
+
+            $("#addObservationVernacularName").val(vernacularNamesItemsArray.join(" | "));
+            $("#addObservationNomenclaturalCode").val(d.taxon.name.code);
+            $("#addObservationTaxonomicStatus").val(d.taxon.name.nomStatus);
+            $("#addObservationNomenclaturalStatus").val('');
+        }
+    });
+
+    $.ajax({
+        type: 'GET',
+        url : COLTaxonHeirarchyURL.replace('COLID', speciesSuggestionsArray[0].usageId),
+        data: '',
+        dataType: 'json',
+        contentType: false,
+        processData: false,            
+        success: function(d) {
+
+            d.forEach((item) => {
+                d.forEach((subItem) => {
+                    if(item.parentId == subItem.id && subItem.rank == "kingdom") {
+                        $("#addObservationKingdom").val(subItem.name);
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "phylum") {
+                        $("#addObservationPhylum").val(subItem.name);
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "subphylum") {
+                        console.log("subphylum: ", subItem.name)
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "class") {
+                        $("#addObservationClass").val(subItem.name);
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "subclass") {
+                        console.log("subclass: ", subItem.name)
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "infraclass") {
+                        console.log("infraclass: ", subItem.name)
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "order") {
+                        $("#addObservationOrder").val(subItem.name);
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "family") {
+                        $("#addObservationFamily").val(subItem.name);
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "subfamily") {
+                        $("#addObservationSubfamily").val(subItem.name);
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "genus") {
+                        $("#addObservationGenus").val(subItem.name);
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "species") {
+                        $("#addObservationParentNameUsageID").val(item.parentId);
+                    }
+                    if(item.parentId == subItem.id && subItem.rank == "subspecies") {
+                        console.log("subspecies: ", subItem.name)
+                    }
+                });
+            })
+        }
+    });
 }
 
 var captureLocationMap;
@@ -244,10 +358,48 @@ const initMapClickForLocationCapture = () => {
         })
     });
 
+    const source = new ol.source.Vector({wrapX: false});
+    var draw = new ol.interaction.Draw({
+        source: source,
+        type: 'Point',
+    });
+    captureLocationMap.addInteraction(draw);
+
     captureLocationMap.on('singleclick', function (evt) {
         var pos = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
-        console.log(pos);
         $('#addObservationLatitude').val(pos[0]);
         $('#addObservationLongitude').val(pos[1]);
+
+        const vectorSource = new ol.source.Vector({
+            features: new ol.format.GeoJSON().readFeatures({
+                'type': 'Feature',
+                'geometry': {
+                    'coordinates':[evt.coordinate[0], evt.coordinate[1]],
+                    'type': 'Point'
+                }
+            })
+        }); 
+    
+        captureLocationMap.getLayers().forEach(function (layer) {
+            if(layer.get('name') == "placemarker") {
+                captureLocationMap.removeLayer(layer);
+            }
+        });
+
+        const vectorLayer = new ol.layer.Vector({
+            source: vectorSource,
+            name: 'placemarker',
+            style: [new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 8,
+                    fill: new ol.style.Fill({
+                        color: [255, 255, 255, 0.3]
+                    }),
+                    stroke: new ol.style.Stroke({color: '#FF0000', width: 2})
+                })
+            })],
+        });
+        captureLocationMap.addLayer(vectorLayer);
+
     });
 }

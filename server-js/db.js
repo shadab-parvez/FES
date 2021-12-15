@@ -111,8 +111,10 @@ const addObservation = (request, response) => {
 
     pool.connect()
     .then(client => {
-        return client.query("SELECT * FROM sp_addObservation($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, " 
-        + "$11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27)",
+        return client.query("SELECT * FROM sp_addObservation($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15," 
+        + "$16, $17, $18, $19, $20, $21,"
+        + "$22, $23, $24, $25, $26, $27,"
+        + "$28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56, $57)",
         [request.body.addObservationCheckListId,
             request.body.addObservationCheckListName,
             request.body.addObservationSpeciesCount,
@@ -143,8 +145,39 @@ const addObservation = (request, response) => {
             request.body.addObservationLocationRemarks,
             request.body.addObservationGeodeticDatum,
             request.body.addObservationCoordinateUncertainityInMeters, 
-            request.body.addObservationCoordinatePrecision]
+            request.body.addObservationCoordinatePrecision,
 
+            // For Taxon
+            request.body.addObservationTaxonID,
+            request.body.addObservationScientificNameID,
+            request.body.addObservationAcceptedNameUsageID,
+            request.body.addObservationParentNameUsageID,
+            request.body.addObservationOriginalNameUsageID,
+            request.body.addObservationNameAccordingToID,
+            request.body.addObservationScientificName,
+            request.body.addObservationAcceptedNameUsage,
+            request.body.addObservationParentNameUsage,
+            request.body.addObservationOriginalNameUsage,
+            request.body.addObservationHigherClassification,
+            request.body.addObservationKingdom,
+            request.body.addObservationPhylum,
+            request.body.addObservationClass,
+            request.body.addObservationOrder,
+            request.body.addObservationFamily,
+            request.body.addObservationSubfamily,
+            request.body.addObservationGenus,
+            request.body.addObservationGenericName,
+            request.body.addObservationSubgenus,
+            request.body.addObservationInfragenericEpithet,
+            request.body.addObservationSpecificEpithet,
+            request.body.addObservationInfraspecificEphithet,
+            request.body.addObservationCultivarEpithet,
+            request.body.addObservationTaxonRank,
+            request.body.addObservationScientificNameAuthorship,
+            request.body.addObservationVernacularName,
+            request.body.addObservationNomenclaturalCode,
+            request.body.addObservationTaxonomicStatus,
+            request.body.addObservationNomenclaturalStatus]
             )
             .then(res => {
                 client.release();

@@ -77,9 +77,9 @@
               <!-- <li class="u-tab-item" role="presentation">
                 <a class="u-button-style u-palette-1-light-1 u-tab-link u-tab-link-3" id="link-tab-identification" href="#tab-identification" role="tab" aria-controls="tab-identification" aria-selected="false">Identification</a>
               </li> -->
-              <li class="u-tab-item" role="presentation">
+              <!-- <li class="u-tab-item" role="presentation">
                 <a class="u-button-style u-palette-1-light-1 u-tab-link u-tab-link-4" id="link-tab-taxonomy" href="#tab-taxonomy" role="tab" aria-controls="tab-taxonomy" aria-selected="false">Taxonomy</a>
-              </li>
+              </li> -->
               <li id="link-tab" class="u-tab-item" role="presentation">
                 <a class="u-button-style u-palette-1-light-1 u-tab-link u-tab-link-5" id="link-tab-location" href="#tab-location" role="tab" aria-controls="tab-location" aria-selected="false">Location</a>
               </li>
@@ -92,6 +92,38 @@
                       <input id="addObservationCheckListId" type="hidden" name="addObservationCheckListId">
                       <input id="addObservationCheckListName" type="hidden" name="addObservationCheckListName">
                       <input id="addObservationUserId" type="hidden" name="addObservationUserId">
+
+                      <input id="addObservationTaxonID" type="hidden" name="addObservationTaxonID">
+                      <input id="addObservationScientificNameID" type="hidden" name="addObservationScientificNameID">
+                      <input id="addObservationAcceptedNameUsageID" type="hidden" name="addObservationAcceptedNameUsageID">
+                      <input id="addObservationParentNameUsageID" type="hidden" name="addObservationParentNameUsageID">
+                      <input id="addObservationOriginalNameUsageID" type="hidden" name="addObservationOriginalNameUsageID">
+                      <input id="addObservationNameAccordingToID" type="hidden" name="addObservationNameAccordingToID">
+                      <input id="addObservationScientificName" type="hidden" name="addObservationScientificName">
+                      <input id="addObservationAcceptedNameUsage" type="hidden" name="addObservationAcceptedNameUsage">
+                      <input id="addObservationParentNameUsage" type="hidden" name="addObservationParentNameUsage">
+                      <input id="addObservationOriginalNameUsage" type="hidden" name="addObservationOriginalNameUsage">
+                      <input id="addObservationHigherClassification" type="hidden" name="addObservationHigherClassification">
+                      <input id="addObservationKingdom" type="hidden" name="addObservationKingdom">
+                      <input id="addObservationPhylum" type="hidden" name="addObservationPhylum">
+                      <input id="addObservationClass" type="hidden" name="addObservationClass">
+                      <input id="addObservationOrder" type="hidden" name="addObservationOrder">
+                      <input id="addObservationFamily" type="hidden" name="addObservationFamily">
+                      <input id="addObservationSubfamily" type="hidden" name="addObservationSubfamily">
+                      <input id="addObservationGenus" type="hidden" name="addObservationGenus">
+                      <input id="addObservationGenericName" type="hidden" name="addObservationGenericName">
+                      <input id="addObservationSubgenus" type="hidden" name="addObservationSubgenus">
+                      <input id="addObservationInfragenericEpithet" type="hidden" name="addObservationInfragenericEpithet">
+                      <input id="addObservationSpecificEpithet" type="hidden" name="addObservationSpecificEpithet">
+                      <input id="addObservationInfraspecificEphithet" type="hidden" name="addObservationInfraspecificEphithet">
+                      <input id="addObservationCultivarEpithet" type="hidden" name="addObservationCultivarEpithet">
+                      <input id="addObservationTaxonRank" type="hidden" name="addObservationTaxonRank">
+                      <input id="addObservationScientificNameAuthorship" type="hidden" name="addObservationScientificNameAuthorship">
+                      <input id="addObservationVernacularName" type="hidden" name="addObservationVernacularName">
+                      <input id="addObservationNomenclaturalCode" type="hidden" name="addObservationNomenclaturalCode">
+                      <input id="addObservationTaxonomicStatus" type="hidden" name="addObservationTaxonomicStatus">
+                      <input id="addObservationNomenclaturalStatus" type="hidden" name="addObservationNomenclaturalStatus">
+
                       <div class="u-form-group u-form-name">
                         <label for="addObservationSpeciesCount" class="u-form-control-hidden u-label"></label>
                         <input type="number" min="0" oninput="this.value = Math.abs(this.value)" placeholder="Species count" id="addObservationSpeciesCount" name="addObservationSpeciesCount" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" autofocus="autofocus">
@@ -135,7 +167,7 @@
                         <input type="number" min="0" oninput="this.value = Math.abs(this.value)" placeholder="Child Count" id="addObservationChildCount" name="addObservationChildCount" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" autofocus="autofocus">
                       </div>
                       <div class="u-form-group u-form-name">
-                        <input type="file" multiple id="addObservationFileUpload" name="addObservationFileUpload" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white"><br>
+                        <input type="file" multiple id="addObservationFileUpload" name="addObservationFileUpload" accept="image/*,audio/*,video/*" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white"><br>
                       </div>
                   </div>                  
                 </div>
@@ -238,10 +270,9 @@
                   </div>
                 </div>
               </div> -->
-              <div class="u-container-style u-tab-pane" id="tab-taxonomy" role="tabpanel" aria-labelledby="link-tab-taxonomy">
+              <!-- <div class="u-container-style u-tab-pane" id="tab-taxonomy" role="tabpanel" aria-labelledby="link-tab-taxonomy">
                 <div class="u-container-layout u-container-layout-5">
                   <div class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form u-form u-form-4">
-                    <!-- <form action="#" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form-4" style="padding: 10px;"> -->
                       <div class="u-form-group u-form-name">
                         <label for="name-1c90" class="u-form-control-hidden u-label"></label>
                         <input type="text" placeholder="Scientific Name" id="name-1c90" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
@@ -258,17 +289,9 @@
                         <label for="message-1c90" class="u-form-control-hidden u-label"></label>
                         <textarea placeholder="Remarks" rows="4" cols="50" id="message-1c90" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
                       </div>
-                      <!-- <div class="u-align-left u-form-group u-form-submit">
-                        <a href="#" class="u-btn u-btn-submit u-button-style">Submit</a>
-                        <input type="submit" value="submit" class="u-form-control-hidden">
-                      </div>
-                      <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
-                      <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then try again. </div>
-                      <input type="hidden" value="" name="recaptchaResponse"> -->
-                    <!-- </form> -->
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="u-container-style u-tab-pane" id="tab-location" role="tabpanel" aria-labelledby="link-tab-location">
                 <div class="u-container-layout u-container-layout-6">
                   <input id="addObservationMinimumElevationInMeters" type="hidden" name="addObservationMinimumElevationInMeters" value="0">
@@ -298,7 +321,6 @@
             </div>
           </div>
         </form>
-          <!-- <a id="submitObservationFormButtonOld" href="#" onClick="return false;" class="u-align-right u-btn u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-btn-2">save</a> -->
           <input id="submitObservationFormButton" type="button" value="Save" class="u-align-right custom-btn u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-btn-2"></input>
         </div>
         <button class="u-dialog-close-button u-icon u-text-grey-50 u-icon-1">
@@ -514,7 +536,6 @@
 
 .u-section-7 .u-dialog-1 {
   width: 995px;
-  min-height: 701px;
   background-image: none;
   margin: 43px auto 60px;
 }

@@ -13,6 +13,7 @@
     <script class="u-script" type="text/javascript" src="jquery-3.6.0.min.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
     <script src="urls.js"></script>
+    <script src="utils.js"></script>
 	<script class="u-script" type="text/javascript" src="view-observation.js" defer=""></script>
 	<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
     <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
@@ -35,9 +36,11 @@
 
     <section class="u-align-center u-clearfix u-section-3" id="sec-c10b">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <h2 id="speciesName" class="u-text u-text-default u-text-1">Species Name</h2>
-        <p class="u-text u-text-2">Vernacular Name in English | Observed in Asia</p>
-        <p class="u-text u-text-2">Published by Author Name</p>
+        
+        <h2 id="speciesName" class="u-text u-text-default u-text-1"></h2>
+        <p id="vernacularName" class="u-text u-text-2"></p>
+        <p id="occurenceTimestamp" class="u-text u-text-2"></p>
+        <p id="authorName" class="u-text u-text-2"></p>
       </div>
     </section>
 
@@ -54,6 +57,7 @@
       </div>
       <div class="u-clearfix u-sheet u-sheet-1"></div>
     </section>
+
     <section class="u-clearfix u-section-2" id="sec-cd9a">
       <div class="u-clearfix u-gutter-10 u-layout-wrap u-layout-wrap-1">
         <div class="u-layout">
@@ -100,12 +104,103 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
               <div class="u-layout-col">
                 <div class="u-size-30">
                   <div class="u-layout-row">
+                    <table class="table table-style">
+                      <tbody>
+                        <tr>
+                          <td>Taxon Id</td>
+                          <td id="taxonId"></td>
+                        </tr>
+                        <tr>
+                          <td>Species</td>
+                          <td id="species"></td>
+                        </tr>
+                        <tr>
+                          <td>Kingdom</td>
+                          <td id="kingdom"></td>
+                        </tr>
+                        <tr>
+                          <td>Phylum</td>
+                          <td id="phylum"></td>
+                        </tr>
+                        <tr>
+                          <td>Class</td>
+                          <td id="class"></td>
+                        </tr>
+                        <tr>
+                          <td>Order</td>
+                          <td id="order"></td>
+                        </tr>
+                        <tr>
+                          <td>Family</td>
+                          <td id="family"></td>
+                        </tr>
+                        <tr>
+                          <td>Subfamily</td>
+                          <td id="subfamily"></td>
+                        </tr>
+                        <tr>
+                          <td>Genus</td>
+                          <td id="genus"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="u-clearfix u-section-6" id="sec-b203">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <!-- <div class="u-align-center u-container-style u-group u-group-1">
+          <div class="u-container-layout u-valign-middle u-container-layout-1">
+            <h2 class="u-text u-text-1">Doing The Right Things</h2>
+            <p class="u-text u-text-2">Sample text. Click to select the text box. Click again or double click to start editing the text.</p>
+            <a href="" class="u-active-none u-border-2 u-border-palette-1-base u-btn u-btn-rectangle u-button-style u-hover-none u-none u-btn-1">Hyperlink</a>
+          </div>
+        </div> -->
+        <div class="u-expanded-width u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-align-center u-container-style u-list-item u-repeater-item gender-male">
+              <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-2">
+                <h1 id="mailCount" class="u-text u-title u-text-3" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000"></h1>
+                <p class="u-text u-text-4">Males</p>
+              </div>
+            </div>
+            <div class="u-align-center u-container-style u-list-item u-repeater-item gender-female">
+              <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-3">
+                <h1 id="femailCount" class="u-text u-title u-text-5" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000"></h1>
+                <p class="u-text u-text-6">Females</p>
+              </div>
+            </div>
+            <div class="u-align-center u-container-style u-list-item u-repeater-item child">
+              <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-4">
+                <h1 id="childCount" class="u-text u-title u-text-7" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000"></h1>
+                <p class="u-text u-text-8">Children</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="u-clearfix u-section-2" id="sec-cd9a">
+      <div class="u-clearfix u-gutter-10 u-layout-wrap u-layout-wrap-1">
+        <div class="u-layout">
+          <div class="u-layout-row">
+            <div class="u-size-100 u-size-60-md">
+              <div class="u-layout-col padding-30">
+                <div class="u-size-30">
+                  <div class="u-layout-row">
                     <div class="u-align-left u-container-style u-layout-cell u-size-30 u-layout-cell-2">
                       <div class="u-container-layout u-container-layout-2">
                         <div class="u-expanded-width u-table u-table-responsive u-table-1">
                           
                           <h2>Record</h2>
-                          <table class="table">
+                          <table class="table table-style">
                             <tbody>
                               <tr>
                                 <td>Basis of record</td>
@@ -130,11 +225,37 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                       </div>
                     </div>
                     <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-30 u-layout-cell-3">
-                      <div class="u-container-layout u-container-layout-3"></div>
+                      <div class="u-container-layout u-container-layout-3">
+                        <div class="u-expanded-width u-table u-table-responsive u-table-1">
+                          
+                          <h2>Occurence</h2>
+                          <table class="table table-style">
+                            <tbody>
+                              <tr>
+                                <td>Occurence ID</td>
+                                <td id="occurenceId"></td>
+                              </tr>
+                              <tr>
+                                <td>Behaviour</td>
+                                <td id="behaviour"></td>
+                              </tr>
+                              <tr>
+                                <td>Individual count</td>
+                                <td id="individualCount"></td>
+                              </tr>
+                              <tr>
+                                <td>Recorded by</td>
+                                <td id="recordedBy"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="u-size-30">
+                <div class="u-size-100">
                   <div class="u-layout-row">
                     <div class="u-align-left u-container-style u-layout-cell u-size-30 u-layout-cell-4">
                       <div class="u-container-layout u-container-layout-4"></div>
