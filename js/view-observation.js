@@ -1,9 +1,16 @@
 var geomArray = [];
 var map;
+var mapview;
 var geojsonObject;
 const initOpenLayers =() => {
     var attribution = new ol.control.Attribution({
         collapsible: false
+    });
+    mapview = new ol.View({
+        center: ol.proj.fromLonLat([4.35247, 50.84673]),
+        maxZoom: 18,
+        zoom: 2,
+        extent: [1193621.21746663, -788296.0228458717, 16055425.50101002, 5082067.749455664]
     });
     map = new ol.Map({
         controls: ol.control.defaults({attribution: false}).extend([attribution]),
@@ -14,12 +21,10 @@ const initOpenLayers =() => {
             })
         ],
         target: 'map',
-        view: new ol.View({
-            center: ol.proj.fromLonLat([4.35247, 50.84673]),
-            maxZoom: 18,
-            zoom: 2
-        })
+        view: mapview
     });
+
+    map.getView().fit([1193621.21746663, -788296.0228458717, 16055425.50101002, 5082067.749455664] , map.getSize());
 
     var url_string = window.location.href
     var url = new URL(url_string);
@@ -29,6 +34,9 @@ const initOpenLayers =() => {
         getObservations();
     else
         getObservations(checklistid);
+
+    getLocation();
+    loadStates();
 }
 
 
@@ -271,3 +279,184 @@ const getObservationDetails = (observationId) => {
 }
 
 
+var currentPosition = document.getElementById("currentPosition");
+const getLocation = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        currentPosition.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+const showPosition = (position) => {
+    currentPosition.innerHTML = "<b>Latitude</b>: " + position.coords.latitude + ", <b>Longitude</b>: " + position.coords.longitude;
+}
+
+
+const inputWMSLayer = () => {
+    $("#addWMSLayerDialog").addClass('u-dialog-open');
+}
+
+const addWMSLayer = () => {
+    var layer = new ol.layer.Image({
+        extent: [-13884991, 2870341, -7455066, 6338219],
+        source: new ol.source.ImageWMS({
+          url: $("#wmsServiceURL").val(),//'https://ahocevar.com/geoserver/wms','topp:states'
+          params: {'LAYERS': $("#wmsLayerName").val()},
+          ratio: 1,
+          //serverType: 'geoserver',
+        }),
+      })
+      map.addLayer(layer);
+}
+
+var layerDataProjection;
+
+const showStatesGeometry = () => {
+    layerDataProjection = 'EPSG:3857';
+    getBoundaryGeometry($("#statesCombo").val());
+}
+
+const showDistrictsGeometry = () => {
+    layerDataProjection = 'EPSG:4326';
+    getBoundaryGeometry($("#districtsCombo").val());
+}
+
+const showSubDistrictsGeometry = () => {
+    layerDataProjection = 'EPSG:4326';
+    getBoundaryGeometry($("#subDistrictsCombo").val());
+}
+
+const showBlocksGeometry = () => {
+    layerDataProjection = 'EPSG:4326';
+    getBoundaryGeometry($("#blocksCombo").val());
+}
+
+const loadStates = () => {
+    fetch('/getStates',
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        //body: JSON.stringify(data)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        data.text.forEach((item) => {
+            $("#statesCombo").append('<option value="' + item.lid + '">' + item.name + '</option>');
+        })
+    })
+}
+
+const loadDistricts = (state_id) => {
+    console.log(state_id)
+    var data = {
+		state_id
+	};
+    fetch('/getDistricts',
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        data.text.forEach((item) => {
+            $("#districtsCombo").append('<option value="' + item.id + '">' + item.name + '</option>');
+        })
+    })
+}
+
+const loadSubDistricts = (district_id) => {
+    console.log(district_id)
+    var data = {
+		district_id
+	};
+    fetch('/getSubDistricts',
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        data.text.forEach((item) => {
+            $("#subDistrictsCombo").append('<option value="' + item.id + '">' + item.name + '</option>');
+        })
+    })
+}
+
+const loadBlocks = (district_id) => {
+    console.log(district_id)
+    var data = {
+		district_id
+	};
+    fetch('/getBlocks',
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        data.text.forEach((item) => {
+            $("#blocksCombo").append('<option value="' + item.id + '">' + item.name + '</option>');
+        })
+    })
+}
+
+const getBoundaryGeometry = (region_id) => {
+    var data = {
+		region_id
+	};
+    fetch('/getBoundaryGeometry',
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        data.text.forEach((item) => {
+
+        const format = new ol.format.WKT();
+
+        const feature = format.readFeature(item.geometry, {
+            dataProjection: layerDataProjection,
+            featureProjection: 'EPSG:3857',
+        });
+        
+        const wktLayer = new ol.layer.Vector({
+            name: 'wktLayer',
+            source: new ol.source.Vector({
+            features: [feature],
+            }),
+        });
+        map.getLayers().forEach(function (layer) {
+            if(layer.get('name') == "wktLayer") {
+                map.removeLayer(layer);
+            }
+        });
+        map.addLayer(wktLayer);
+        console.log('WKT added');
+
+        if($("#zoomToFeature").is(":checked")) {
+            
+            var coord1 = ol.proj.transform([parseFloat(item.xmin), parseFloat(item.ymin)], layerDataProjection, 'EPSG:3857');
+            var coord2 = ol.proj.transform([parseFloat(item.xmax), parseFloat(item.ymax)], layerDataProjection, 'EPSG:3857');
+
+            map.getView().fit([coord1[0], coord1[1], coord2[0], coord2[1]] , map.getSize());
+        }
+            
+        })
+    })
+}

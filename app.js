@@ -1,4 +1,5 @@
 console.log('Loading...')
+const config = require('config');
 const express = require('express')
 const bodyParser = require('body-parser')
 const db = require('./server-js/db')
@@ -6,10 +7,10 @@ const http = require('http')
 const fs = require('fs')
 const path = require('path');
 const fileUpload = require('express-fileupload');
-
+console.log('Loaded imports')
 
 const app = express()
-const port = 3000
+const port = config.get('Staging.appPort');
 
 console.log('Loading')
 
@@ -63,6 +64,27 @@ app.get('/viewGallery', function(req, res) {
     res.sendFile(path.join(__dirname, '/html/Gallery.html'));
 });
 
+
+// For Admin heirarchy
+app.post('/getStates', function(request, response) {
+    db.getStates(request, response)
+});
+
+app.post('/getDistricts', function(request, response) {
+    db.getDistricts(request, response)
+});
+
+app.post('/getSubDistricts', function(request, response) {
+    db.getSubDistricts(request, response)
+});
+
+app.post('/getBlocks', function(request, response) {
+    db.getBlocks(request, response)
+});
+
+app.post('/getBoundaryGeometry', function(request, response) {
+    db.getBoundaryGeometry(request, response)
+});
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)

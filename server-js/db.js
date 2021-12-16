@@ -1,6 +1,8 @@
 //const fileUpload = require('express-fileupload');
 const config = require('config');
 const Pool = require('pg').Pool
+const fetch = require('cross-fetch');
+var FormData = require('form-data');
 
 const dbConfig = config.get('Staging.dbConfig');
 const fileUploadPath = config.get('Staging.fileUploadPath');
@@ -228,11 +230,92 @@ const getObservationDetails = (request, response) => {
     });
 }
 
+const getStates = (request, response) => {
+    fetch('https://adminhierarchy.indiaobservatory.org.in/API/getStates',
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        response.status(201).send(data)
+    })
+}
+
+const getDistricts = (request, response) => {
+    const { state_id} = request.body
+    var formData = new FormData();
+    formData.append('state_id', state_id);
+    fetch('https://adminhierarchy.indiaobservatory.org.in/API/getDistricts',
+    {
+        method: "POST",
+        body: formData
+    })
+    .then(function(res) { return res.text(); })
+    .then(function(data) {
+        response.status(201).send(data)
+    })
+}
+
+const getSubDistricts = (request, response) => {
+    const { district_id} = request.body
+    var formData = new FormData();
+    formData.append('district_id', district_id);
+    fetch('https://adminhierarchy.indiaobservatory.org.in/API/getSubDistricts',
+    {
+        method: "POST",
+        body: formData
+    })
+    .then(function(res) { return res.text(); })
+    .then(function(data) {
+        response.status(201).send(data)
+    })
+}
+
+const getBlocks = (request, response) => {
+    const { district_id} = request.body
+    var formData = new FormData();
+    formData.append('district_id', district_id);
+    fetch('https://adminhierarchy.indiaobservatory.org.in/API/getBlocks',
+    {
+        method: "POST",
+        body: formData
+    })
+    .then(function(res) { return res.text(); })
+    .then(function(data) {
+        response.status(201).send(data)
+    })
+}
+
+const getBoundaryGeometry = (request, response) => {
+    const { region_id} = request.body
+    var formData = new FormData();
+    formData.append('region_id', region_id);
+    fetch('https://adminhierarchy.indiaobservatory.org.in/API/getGeometry',
+    {
+        method: "POST",
+        body: formData
+    })
+    .then(function(res) { return res.text(); })
+    .then(function(data) {
+        response.status(201).send(data)
+    })
+}
+
+
 
 module.exports = {
     addCheckList,
     getChecklists,
     addObservation,
     getObservations,
-    getObservationDetails
+    getObservationDetails,
+    getStates,
+    getDistricts,
+    getSubDistricts,
+    getBlocks,
+
+    getBoundaryGeometry
   }

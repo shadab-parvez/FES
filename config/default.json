@@ -1,5 +1,6 @@
 {
     "Staging": {
+      "appPort": 8080,
       "dbConfig": {
         "host": "localhost",
         "database": "fes",
@@ -11,6 +12,7 @@
       "fileUploadVirtualPath": "/uploads/"
     },
     "Production": {
+        "appPort": 8080,
         "dbConfig": {
           "host": "localhost",
           "database": "fes",
