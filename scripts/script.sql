@@ -407,3 +407,44 @@ BEGIN
 	END IF;
 END;
 $BODY$;
+
+
+CREATE OR REPLACE FUNCTION public.sp_searchSpecies(
+	sp_keyword character varying)
+    RETURNS TABLE(
+		sp_geom text,
+		sp_scientific_name character varying,
+		sp_kingdom character varying,
+		sp_phylum character varying,
+		sp_class character varying,
+		sp_order character varying,
+		sp_family character varying,
+		sp_subfamily character varying,
+		sp_genus character varying,
+		sp_sub_genus character varying,
+		sp_generic_name character varying,
+		sp_vernacular_name character varying
+	) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+BEGIN
+	return query 	
+	SELECT ST_AsGeoJSON(o.geometry) as "geom", tax.scientific_name, tax.kingdom, tax.phylum, tax.class, tax."order", tax.family, tax.subfamily, tax.genus, tax.sub_genus, tax.generic_name, tax.vernacular_name FROM taxon tax
+	INNER JOIN observation o ON o.observation_id = tax.observation_id
+	WHERE UPPER(tax.scientific_name) LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax.kingdom) LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax.phylum) LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax.class) LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax."order") LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax.family) LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax.subfamily) LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax.genus) LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax.sub_genus) LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax.generic_name) LIKE UPPER('%' || sp_keyword || '%')
+	OR UPPER(tax.vernacular_name) LIKE UPPER('%' || sp_keyword || '%');
+END;
+$BODY$;

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="page_type" content="np-template-header-footer-from-plugin">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="nicepage.css" media="screen">
+    <link rel="stylesheet" href="species-search.css" type="text/css">
+    <script class="u-script" type="text/javascript" src="jquery-3.6.0.min.js" defer=""></script>
+    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+    <script src="urls.js"></script>
+    <script src="utils.js"></script>
+	  <script class="u-script" type="text/javascript" src="search-species.js" defer=""></script>
+	  <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+    <meta name="generator" content="Nicepage 4.0.3, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
+    
+    
+    
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "",
+		"logo": "images/default-logo.png"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Gallery">
+    <meta property="og:type" content="website">
+  </head>
+  <body onload="initOpenLayers()" class="u-body">
+
+    <section class="u-align-center u-clearfix u-section-3" id="sec-c10b">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        
+
+        <div class="input-group mb-3">
+            <input id="searchSpeciesTextBox" class="form-control" type="search" placeholder="Search species..." onclick="toggleDropDownDiv()" onkeyup="searchSpeciesOnKeyPress(this.value)" aria-label="Search" aria-describedby="basic-addon2">
+        </div>
+        <div id="searchSpeciesTextBoxDropDown" class="dropdown-div"></div>
+
+
+        <!-- <input id="searchSpeciesTextBox" placeholder="Search species..." onclick="toggleDropDownDiv()" onkeyup="searchSpeciesOnKeyPress(this.value)"/>
+        <div id="searchSpeciesTextBoxDropDown" class="dropdown-div"></div> -->
+
+        <div id="currentPosition"></div>
+      </div>
+    </section>
+
+    
+    <section class="u-clearfix u-grey-light-2 u-typography-custom-page-typography-12--Map u-section-1" id="sec-10e3">
+      <div class="u-expanded u-grey-light-2 u-map">
+        <div class="embed-responsive">
+          <div id="map" class="map"></div>
+          <div id="popup" class="ol-popup">
+            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+            <div id="popup-content"></div>
+        </div>
+        <!-- <div id="details"></div> -->
+        </div>
+      </div>
+      <div class="u-clearfix u-sheet u-sheet-1"></div>
+      <div id="addWMSLayerButton" class="adminToolset">
+        <input type="button" value="Add WMS" class="layerlistAddButtonClass " onclick="inputWMSLayer()"></input>
+        
+        <input type="checkbox" id="zoomToFeature" name="zoomToFeature">
+        <label for="zoomToFeature"> Zoom to feature</label><br>
+
+        <select id="statesCombo" onchange="loadDistricts(this.value)" class="toolset-combo">
+          <option value="">Select States</option>
+        </select>
+        <input type="button" value="Show" class="layerlistAddButtonClass" onclick="showStatesGeometry()"></input><br/>
+
+        <select id="districtsCombo" onchange="loadSubDistricts(this.value); loadBlocks(this.value);" class="toolset-combo">
+          <option value="">Select Districts</option>
+        </select>
+        <input type="button" value="Show" class="layerlistAddButtonClass" onclick="showDistrictsGeometry()"></input><br/>
+
+        <select id="subDistrictsCombo" class="toolset-combo">
+          <option value="">Select Sub Districts</option>
+        </select>
+        <input type="button" value="Show" class="layerlistAddButtonClass" onclick="showSubDistrictsGeometry()"></input><br/>
+
+        <select id="blocksCombo" class="toolset-combo">
+          <option value="">Select Blocks</option>
+        </select>
+        <input type="button" value="Show" class="layerlistAddButtonClass" onclick="showBlocksGeometry()"></input><br/>
+      </div>
+    </section>
+
+    <section class="u-black u-clearfix u-container-style u-dialog-block u-opacity u-opacity-70 u-section-9" id="addWMSLayerDialog">
+      <div class="u-align-center u-container-style u-dialog u-white u-dialog-1">
+        <div class="u-container-layout u-container-layout-1">
+          <p class="u-text u-text-default u-text-1">Enter WMS layer details</p>
+          <div class="u-form u-form-1">
+              <input type="hidden" id="siteId" name="siteId" value="1947571">
+              <input type="hidden" id="pageId" name="pageId" value="78962311">
+              <div class="u-form-group u-form-name margin-15">
+                <label for="wmsServiceURL" class="u-form-control-hidden u-label"></label>
+                <input type="text" placeholder="Enter WMS URL" id="wmsServiceURL" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+              </div>
+              <div class="u-form-group margin-15">
+                <label for="wmsLayerName" class="u-form-control-hidden u-label"></label>
+                <input type="text" placeholder="Enter layer name" id="wmsLayerName" name="text" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+              </div>
+          </div>
+          <a href="#" onclick="addWMSLayer()" class="u-align-center u-btn u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-btn-2">Add</a>
+        </div><button class="u-dialog-close-button u-icon u-text-grey-40 u-icon-1"><svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 16 16" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-efe9"></use></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xml:space="preserve" class="u-svg-content" viewBox="0 0 16 16" x="0px" y="0px" id="svg-efe9"><rect x="7" y="0" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -3.3138 8.0002)" width="2" height="16"></rect><rect x="0" y="7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -3.3138 8.0002)" width="16" height="2"></rect></svg></button>
+      </div>
+    </section>
+
+  </body>
+</html>

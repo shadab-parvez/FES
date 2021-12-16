@@ -195,6 +195,23 @@ const addObservation = (request, response) => {
     });
 }
 
+const searchSpecies = (request, response) => {
+    const { keyword } = request.body
+    console.log(keyword)
+    console.log(request.body)
+    pool.connect()
+    .then(client => {
+        return client.query("SELECT * FROM sp_searchSpecies($1)", [keyword])
+            .then(res => {
+                client.release();
+                response.status(201).send(res.rows)
+            })
+            .catch(e => {
+                client.release();
+                console.log(e.stack);
+            })
+    });
+}
 
 const getObservations = (request, response) => {
     const {user_id, checkListId } = request.body;
@@ -312,6 +329,7 @@ module.exports = {
     addObservation,
     getObservations,
     getObservationDetails,
+    searchSpecies,
     getStates,
     getDistricts,
     getSubDistricts,

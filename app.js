@@ -52,6 +52,10 @@ app.post('/getObservationDetails', function(request, response) {
     db.getObservationDetails(request, response)
 });
 
+app.post('/searchSpecies', function(request, response) {
+    db.searchSpecies(request, response)
+});
+
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, '/html/index.html'));
 });
@@ -64,6 +68,9 @@ app.get('/viewGallery', function(req, res) {
     res.sendFile(path.join(__dirname, '/html/Gallery.html'));
 });
 
+app.get('/speciesSearch', function(req, res) {
+    res.sendFile(path.join(__dirname, '/html/SpeciesSearch.html'));
+});
 
 // For Admin heirarchy
 app.post('/getStates', function(request, response) {
