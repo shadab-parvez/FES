@@ -39,6 +39,16 @@ const initOpenLayers =() => {
     loadStates();
 }
 
+const toggleList = () => {
+    if($(".adminToolset").css('right') == '0px') {
+        $(".adminToolset").animate({right: '-310px'});
+        $("#toggleAdminSearchTools").text("Show");
+    }
+    else{
+        $(".adminToolset").animate({right: '0px'});
+        $("#toggleAdminSearchTools").text("Hide");
+    }
+}
 
 const getObservations = (checkListId) => {
 
@@ -254,10 +264,15 @@ const getObservationDetails = (observationId) => {
         $("#individualCount").html(obj.individual_count);
         $("#recordedBy").html(obj.recorded_by);
 
-        var imageSourceCarousalItemHTML;
-        var imageSourceHTML;
-        obj.associated_media.split('|').forEach((item) => {
-            imageSourceCarousalItemHTML += '<div class="u-active u-carousel-item u-gallery-item u-carousel-item-1">'
+        var imageSourceCarousalItemHTML = '';
+        var imageSourceHTML = '';
+        obj.associated_media.split('|').forEach((item, i) => {
+            var active = '';
+            if(i == 0)
+                active = 'u-active';
+            else 
+                active = '';
+            imageSourceCarousalItemHTML += '<div class="' + active + ' u-carousel-item u-gallery-item u-carousel-item-' + i + '">'
             + '                  <div class="u-back-slide">'
             + '                    <img class="u-back-image u-expanded" src="' + window.location.origin + "/" + item.replace('/uploads', '') + '">'
             + '                  </div>'
@@ -351,6 +366,7 @@ const loadStates = () => {
 
 const loadDistricts = (state_id) => {
     console.log(state_id)
+    $("#adminSearchPanelLoader").show();
     var data = {
 		state_id
 	};
@@ -364,6 +380,10 @@ const loadDistricts = (state_id) => {
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
+        $("#adminSearchPanelLoader").hide();
+        $('#districtsCombo').empty().append('<option value="">Select Districts</option>');
+        $('#subDistrictsCombo').empty().append('<option value="">Select Sub Districts</option>');
+        $('#blocksCombo').empty().append('<option value="">Select Blocks</option>');
         data.text.forEach((item) => {
             $("#districtsCombo").append('<option value="' + item.id + '">' + item.name + '</option>');
         })
@@ -372,6 +392,7 @@ const loadDistricts = (state_id) => {
 
 const loadSubDistricts = (district_id) => {
     console.log(district_id)
+    $("#adminSearchPanelLoader").show();
     var data = {
 		district_id
 	};
@@ -385,6 +406,8 @@ const loadSubDistricts = (district_id) => {
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
+        $("#adminSearchPanelLoader").hide();
+        $('#subDistrictsCombo').empty().append('<option value="">Select Sub Districts</option>');
         data.text.forEach((item) => {
             $("#subDistrictsCombo").append('<option value="' + item.id + '">' + item.name + '</option>');
         })
@@ -393,6 +416,7 @@ const loadSubDistricts = (district_id) => {
 
 const loadBlocks = (district_id) => {
     console.log(district_id)
+    $("#adminSearchPanelLoader").show();
     var data = {
 		district_id
 	};
@@ -406,6 +430,8 @@ const loadBlocks = (district_id) => {
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
+        $("#adminSearchPanelLoader").hide();
+        $('#blocksCombo').empty().append('<option value="">Select Blocks</option>');
         data.text.forEach((item) => {
             $("#blocksCombo").append('<option value="' + item.id + '">' + item.name + '</option>');
         })
@@ -416,6 +442,7 @@ const getBoundaryGeometry = (region_id) => {
     var data = {
 		region_id
 	};
+    $("#adminSearchPanelLoader").show();
     fetch('/getBoundaryGeometry',
     {
         method: "POST",
@@ -426,6 +453,7 @@ const getBoundaryGeometry = (region_id) => {
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
+        $("#adminSearchPanelLoader").hide();
         data.text.forEach((item) => {
 
         const format = new ol.format.WKT();

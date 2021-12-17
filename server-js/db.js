@@ -225,6 +225,7 @@ const getObservations = (request, response) => {
             })
             .catch(e => {
                 client.release();
+                console.log("ERROR");
                 console.log(e.stack);
             })
     });

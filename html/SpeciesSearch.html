@@ -41,11 +41,6 @@
             <input id="searchSpeciesTextBox" class="form-control" type="search" placeholder="Search species..." onclick="toggleDropDownDiv()" onkeyup="searchSpeciesOnKeyPress(this.value)" aria-label="Search" aria-describedby="basic-addon2">
         </div>
         <div id="searchSpeciesTextBoxDropDown" class="dropdown-div"></div>
-
-
-        <!-- <input id="searchSpeciesTextBox" placeholder="Search species..." onclick="toggleDropDownDiv()" onkeyup="searchSpeciesOnKeyPress(this.value)"/>
-        <div id="searchSpeciesTextBoxDropDown" class="dropdown-div"></div> -->
-
         <div id="currentPosition"></div>
       </div>
     </section>
@@ -64,6 +59,8 @@
       </div>
       <div class="u-clearfix u-sheet u-sheet-1"></div>
       <div id="addWMSLayerButton" class="adminToolset">
+        <div id="adminSearchPanelLoader" class="adminSearchPanelLoader">Loading...</div>
+        <div id="toggleAdminSearchTools" class="toggleAdminSearchToolsClass" title="Show/hide layers search panel" onclick="toggleList()">Hide</div>
         <input type="button" value="Add WMS" class="layerlistAddButtonClass " onclick="inputWMSLayer()"></input>
         
         <input type="checkbox" id="zoomToFeature" name="zoomToFeature">

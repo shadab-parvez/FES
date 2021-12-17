@@ -94,6 +94,7 @@ const submitObservationForm = () => {
             return;
         }
 
+        $("#addObservationLoader").show();
         e.preventDefault();
         var formData = new FormData($('#addObservationForm')[0]);
         $.ajax({
@@ -105,12 +106,16 @@ const submitObservationForm = () => {
             processData: false,            
             success: function(d) {
                 if(d.status == "SUCCESS") {
+                    $("#addObservationLoader").hide();
                     showSuccessMessage('Observation successfuly added');
                     resetAddObservationForm();
 
                     $('#addObservationDialogBox').removeClass('u-dialog-open');
                 }
                 console.log(d);
+            },
+            error: function(e) {
+                $("#addObservationLoader").hide();
             }
         });
     });

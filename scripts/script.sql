@@ -265,7 +265,7 @@ DECLARE
 BEGIN
 	var_observation_id := uuid_generate_v4();
 	INSERT INTO observation(observation_id, checklist_id, species_count, species_id, need_id, gender, male_count, female_count, child_count, date_time, created_by, geometry)
-	VALUES (var_observation_id, sp_checklist_id, sp_species_count, 0, null, sp_gender, sp_male_count, sp_female_count, sp_child_count, CURRENT_TIMESTAMP, sp_created_by, ST_MakePoint(sp_longitude, sp_latitude));
+	VALUES (var_observation_id, sp_checklist_id, sp_species_count, 0, null, sp_gender, sp_male_count, sp_female_count, sp_child_count, CURRENT_TIMESTAMP, sp_created_by, ST_SetSRID(ST_MakePoint(sp_longitude sp_latitude), 4326));
 	
 	INSERT INTO record_level(
 	observation_id, record_level_id, type, language, license, rights_holder, access_rights, institution_id, collection_id, dataset_id, institution_code, collection_code, dataset_name, basis_of_record, dynamic_properties, file_path, file_uri)
@@ -382,7 +382,7 @@ BEGIN
 		'id',         observation_id,
 		'geometry',   ST_AsGeoJSON(geometry)::jsonb,
 		'properties', to_jsonb(row) - 'geometry'
-		) FROM (SELECT o.observation_id, o.species_count, o.gender, o.male_count, o.female_count, o.child_count, o.date_time, ST_AsGeoJSON(ST_Transform(o.geometry, 3857)) as "geometry", r."type", r."language", r.license, r.rights_holder,
+		) FROM (SELECT o.observation_id, o.species_count, o.gender, o.male_count, o.female_count, o.child_count, o.date_time, ST_Transform(o.geometry, 3857) as "geometry", r."type", r."language", r.license, r.rights_holder,
 		r.institution_id, r.institution_code, r.collection_id, r.collection_code, r.dataset_id, r.dataset_name, r.basis_of_record, r.dynamic_properties, r.file_uri
 		FROM observation o INNER JOIN record_level r
 		ON o.observation_id = r.observation_id
@@ -396,7 +396,7 @@ BEGIN
 		'id',         observation_id,
 		'geometry',   ST_AsGeoJSON(geometry)::jsonb,
 		'properties', to_jsonb(row) - 'geometry'
-		) FROM (SELECT o.observation_id, o.species_count, o.gender, o.male_count, o.female_count, o.child_count, o.date_time, ST_AsGeoJSON(ST_Transform(o.geometry, 3857)) as "geometry", r."type", r."language", r.license, r.rights_holder,
+		) FROM (SELECT o.observation_id, o.species_count, o.gender, o.male_count, o.female_count, o.child_count, o.date_time, ST_Transform(o.geometry, 3857) as "geometry", r."type", r."language", r.license, r.rights_holder,
 		r.institution_id, r.institution_code, r.collection_id, r.collection_code, r.dataset_id, r.dataset_name, r.basis_of_record, r.dynamic_properties, r.file_uri
 		FROM observation o INNER JOIN record_level r
 		ON o.observation_id = r.observation_id
@@ -412,6 +412,7 @@ $BODY$;
 CREATE OR REPLACE FUNCTION public.sp_searchSpecies(
 	sp_keyword character varying)
     RETURNS TABLE(
+		sp_observation_id uuid,
 		sp_geom text,
 		sp_scientific_name character varying,
 		sp_kingdom character varying,
@@ -432,8 +433,8 @@ CREATE OR REPLACE FUNCTION public.sp_searchSpecies(
 
 AS $BODY$
 BEGIN
-	return query 	
-	SELECT ST_AsGeoJSON(o.geometry) as "geom", tax.scientific_name, tax.kingdom, tax.phylum, tax.class, tax."order", tax.family, tax.subfamily, tax.genus, tax.sub_genus, tax.generic_name, tax.vernacular_name FROM taxon tax
+	return query
+	SELECT tax.observation_id, ST_AsGeoJSON(ST_Transform(o.geometry, 3857)) as "geom", tax.scientific_name, tax.kingdom, tax.phylum, tax.class, tax."order", tax.family, tax.subfamily, tax.genus, tax.sub_genus, tax.generic_name, tax.vernacular_name FROM taxon tax
 	INNER JOIN observation o ON o.observation_id = tax.observation_id
 	WHERE UPPER(tax.scientific_name) LIKE UPPER('%' || sp_keyword || '%')
 	OR UPPER(tax.kingdom) LIKE UPPER('%' || sp_keyword || '%')

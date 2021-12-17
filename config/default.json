@@ -2,10 +2,10 @@
     "Staging": {
       "appPort": 8080,
       "dbConfig": {
-        "host": "localhost",
-        "database": "fes",
+        "host": "fesdatabase.czxhkksnwxim.us-east-2.rds.amazonaws.com",
+        "database": "gov_pro_db",
         "user": "postgres",
-        "password": "postgres",
+        "password": "fEs_7654",
         "port": 5432
       },
       "fileUploadPath": "C:/work/projects/FES/uploads/",
