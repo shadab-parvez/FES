@@ -1,5 +1,5 @@
 {
-    "Staging": {
+    "Production": {
       "appPort": 8080,
       "dbConfig": {
         "host": "fesdatabase.czxhkksnwxim.us-east-2.rds.amazonaws.com",
@@ -8,11 +8,11 @@
         "password": "fEs_7654",
         "port": 5432
       },
-      "fileUploadPath": "C:/work/projects/FES/uploads/",
+      "fileUploadPath": "/home/ubuntu/FES/uploads/",
       "fileUploadVirtualPath": "/uploads/"
     },
-    "Production": {
-        "appPort": 8080,
+    "Development": {
+        "appPort": 3000,
         "dbConfig": {
           "host": "localhost",
           "database": "fes",

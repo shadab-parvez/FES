@@ -8,13 +8,23 @@ const fs = require('fs')
 const path = require('path');
 const fileUpload = require('express-fileupload');
 console.log('Loaded imports')
+const cors = require('cors');
 
 const app = express()
-const port = config.get('Staging.appPort');
 
-console.log('Loading')
+var appMode;
+if(process.argv[2] == "dev")
+    appMode = "Development";
+else if(process.argv[2] == "production")
+    appMode = "Production";
+else
+    appMode = "Development";
+console.log('Loading ' + appMode + ' mode')
+
+const port = config.get(appMode + '.appPort');
 
 app.use(bodyParser.json())
+app.use(cors())
 app.use(
   bodyParser.urlencoded({
     extended: false,

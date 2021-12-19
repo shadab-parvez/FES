@@ -4,10 +4,17 @@ const Pool = require('pg').Pool
 const fetch = require('cross-fetch');
 var FormData = require('form-data');
 
-const dbConfig = config.get('Staging.dbConfig');
-const fileUploadPath = config.get('Staging.fileUploadPath');
-const fileUploadVirtualPath = config.get('Staging.fileUploadVirtualPath');
+var appMode;
+if(process.argv[2] == "dev")
+    appMode = "Development";
+else if(process.argv[2] == "production")
+    appMode = "Production";
+else
+    appMode = "Development";
 
+const dbConfig = config.get(appMode + '.dbConfig');
+const fileUploadPath = config.get(appMode + '.fileUploadPath');
+const fileUploadVirtualPath = config.get(appMode + '.fileUploadVirtualPath');
 
 const pool = new Pool(dbConfig)
 
