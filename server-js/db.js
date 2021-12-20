@@ -18,6 +18,22 @@ const fileUploadVirtualPath = config.get(appMode + '.fileUploadVirtualPath');
 
 const pool = new Pool(dbConfig)
 
+const getUserProfileStatistics = (request, response) => {
+    const {user_id } = request.body
+    pool.connect()
+    .then(client => {
+        return client.query("SELECT * FROM sp_getprofilestatistics($1)", [user_id])
+            .then(res => {
+                client.release();
+                response.status(201).send(res.rows)
+            })
+            .catch(e => {
+                client.release();
+                console.log(e.stack);
+            })
+    });
+}
+
 const addCheckList = (request, response) => {
     const { name, description, is_group, group_count, travel_mode, user_id } = request.body
     pool.connect()
@@ -332,6 +348,7 @@ const getBoundaryGeometry = (request, response) => {
 
 
 module.exports = {
+    getUserProfileStatistics,
     addCheckList,
     getChecklists,
     addObservation,

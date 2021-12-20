@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS public.event
 CREATE TABLE IF NOT EXISTS public.identification
 (
     identification_id uuid,
+	observation_id uuid,
     identification_qualifier character varying COLLATE pg_catalog."default",
     identified_by character varying COLLATE pg_catalog."default",
     identified_by_id uuid,
@@ -195,7 +196,7 @@ $BODY$;
 
 -- DROP FUNCTION IF EXISTS public.sp_addobservation(character varying, character varying, integer, character varying, character varying, integer, integer, integer, character varying, double precision, double precision, character varying, character varying[], character varying[], character varying[], numeric, character varying, character varying, character varying, character varying, character varying, double precision, double precision, character varying, double precision, double precision, double precision, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying);
 
-CREATE OR REPLACE FUNCTION public.sp_addobservation(
+CREATE OR REPLACE FUNCTION public.sp_addObservation(
 	sp_checklist_id character varying,
 	sp_checklist_name character varying,
 	sp_species_count integer,
@@ -211,18 +212,21 @@ CREATE OR REPLACE FUNCTION public.sp_addobservation(
 	sp_file_path character varying[],
 	sp_file_uri character varying[],
 	sp_file_extensions character varying[],
+
 	sp_individual_count numeric,
 	sp_lifestage character varying,
 	sp_reproductive_condition character varying,
 	sp_behaviour character varying,
 	sp_grouped_file_path character varying,
 	sp_occurence_remarks character varying,
+
 	sp_minimum_elevation_in_meters double precision,
 	sp_maximum_elevation_in_meters double precision,
 	sp_location_remarks character varying,
 	sp_geodetic_datum double precision,
-	sp_coordinate_uncertainity_in_meters double precision,
+	sp_coordinate_uncertainity_in_meters double precision, 
 	sp_coordinate_precision double precision,
+
 	sp_taxon_id character varying,
 	sp_scientific_name_id character varying,
 	sp_accepted_name_usage_id character varying,
@@ -253,35 +257,39 @@ CREATE OR REPLACE FUNCTION public.sp_addobservation(
 	sp_nomenclatural_code character varying,
 	sp_taxonomic_status character varying,
 	sp_nomenclatural_status character varying)
-    RETURNS character varying
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
+	RETURNS character varying
+	LANGUAGE 'plpgsql'
+AS $$
 DECLARE
 	var_observation_id uuid;
 	counter INT = 0 ;
 	record_type character varying;
+	is_image_type boolean;
+	is_video_type boolean;
 BEGIN
 	var_observation_id := uuid_generate_v4();
 	INSERT INTO observation(observation_id, checklist_id, species_count, species_id, need_id, gender, male_count, female_count, child_count, date_time, created_by, geometry)
-	VALUES (var_observation_id, sp_checklist_id, sp_species_count, 0, null, sp_gender, sp_male_count, sp_female_count, sp_child_count, CURRENT_TIMESTAMP, sp_created_by, ST_SetSRID(ST_MakePoint(sp_longitude sp_latitude), 4326));
+	VALUES (var_observation_id, sp_checklist_id, sp_species_count, 0, null, sp_gender, sp_male_count, sp_female_count, sp_child_count, CURRENT_TIMESTAMP, sp_created_by, ST_MakePoint(sp_longitude, sp_latitude));
 	
 	INSERT INTO record_level(
-	observation_id, record_level_id, type, language, license, rights_holder, access_rights, institution_id, collection_id, dataset_id, institution_code, collection_code, dataset_name, basis_of_record, dynamic_properties, file_path, file_uri)
-	VALUES (var_observation_id, uuid_generate_v4(), 'Event', 'en', sp_license, sp_created_by, null, null, null, null, null, 'IBIS', sp_checklist_name, 'HumanObservation', null, null, null);
+	observation_id, record_level_id, type, language, license, rights_holder, access_rights, institution_id, collection_id, dataset_id, institution_code, collection_code, dataset_name, basis_of_record, dynamic_properties, file_path, file_uri, is_image, is_video)
+	VALUES (var_observation_id, uuid_generate_v4(), 'Event', 'en', sp_license, sp_created_by, null, null, null, null, null, 'IBIS', sp_checklist_name, 'HumanObservation', null, null, null, null, null);
 	
 	FOR counter in array_lower(sp_file_path, 1) .. array_upper(sp_file_path, 1)
 	LOOP
 		IF sp_file_extensions[counter] IN ('JPG','TIFF','PNG') THEN
 			record_type := 'StillImage';
+			is_image_type := true;
+			is_video_type := null;
 		END IF;
 		IF sp_file_extensions[counter] IN ('MOV','AVI','MPEG') THEN
 			record_type := 'Movie';
+			is_image_type := null;
+			is_video_type := true;
 		END IF;
 		INSERT INTO public.record_level(
-		observation_id, record_level_id, type, language, license, rights_holder, access_rights, institution_id, collection_id, dataset_id, institution_code, collection_code, dataset_name, basis_of_record, dynamic_properties, file_path, file_uri)
-		VALUES (var_observation_id, uuid_generate_v4(), record_type, 'en', sp_license, sp_created_by, null, null, null, null, null, 'IBIS', sp_checklist_name, 'HumanObservation', null, sp_file_path[counter], sp_file_uri[counter]);
+		observation_id, record_level_id, type, language, license, rights_holder, access_rights, institution_id, collection_id, dataset_id, institution_code, collection_code, dataset_name, basis_of_record, dynamic_properties, file_path, file_uri, is_image, is_video)
+		VALUES (var_observation_id, uuid_generate_v4(), record_type, 'en', sp_license, sp_created_by, null, null, null, null, null, 'IBIS', sp_checklist_name, 'HumanObservation', null, sp_file_path[counter], sp_file_uri[counter], is_image_type, is_video_type);
 		
 	END LOOP;
 	
@@ -300,7 +308,7 @@ BEGIN
 	RETURN 'SUCCESS';
 	
 END;
-$BODY$;
+$$;
 
 
 -- DROP FUNCTION IF EXISTS public.sp_getchecklists(character varying);
@@ -449,3 +457,35 @@ BEGIN
 	OR UPPER(tax.vernacular_name) LIKE UPPER('%' || sp_keyword || '%');
 END;
 $BODY$;
+
+
+
+CREATE OR REPLACE FUNCTION sp_getprofilestatistics(user_id character varying) 
+returns table (
+		observations bigint,
+		checklists bigint,
+		species bigint,
+		identifications bigint,
+		images bigint,
+		videos bigint
+	) 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  return query 
+	SELECT 	COUNT(DISTINCT(o.observation_id)) as "Observations",
+		COUNT(DISTINCT(c.checklist_id)) as "Checklists",
+		COUNT(DISTINCT(tax.taxon_id)) as "Species",
+		COUNT(DISTINCT(i.identification_id)) as "Identifications",
+		COUNT(r.is_image) as "Images",
+		COUNT(r.is_video) as "Video"
+	FROM observation o 
+	INNER JOIN checklist c ON c.checklist_id = o.checklist_id::uuid
+	INNER JOIN record_level r ON o.observation_id = r.observation_id
+	INNER JOIN occurence oc ON o.observation_id = oc.observation_id
+	INNER JOIN "location" loc ON o.observation_id = loc.observation_id
+	INNER JOIN taxon tax ON o.observation_id = tax.observation_id
+	FULL JOIN identification i ON o.observation_id = i.observation_id
+	WHERE o.created_by = user_id;
+END;
+$$;

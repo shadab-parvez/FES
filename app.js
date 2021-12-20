@@ -7,8 +7,9 @@ const http = require('http')
 const fs = require('fs')
 const path = require('path');
 const fileUpload = require('express-fileupload');
-console.log('Loaded imports')
 const cors = require('cors');
+
+console.log('Loaded imports')
 
 const app = express()
 
@@ -38,9 +39,9 @@ app.use(express.static(path.join(__dirname, '/css')))
 app.use(express.static(path.join(__dirname, '/js')))
 app.use(express.static(path.join(__dirname, '/uploads')))
 
-/* app.get('/add', (request, response) => {
-    db.addObservation(request, response)
-}) */
+app.post('/getUserProfileStatistics', function(request, response) {
+    db.getUserProfileStatistics(request, response)
+});
 
 app.post('/addCheckList', (request, response) => {
     db.addCheckList(request, response)
