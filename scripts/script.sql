@@ -479,3 +479,18 @@ BEGIN
 	WHERE o.created_by = user_id;
 END;
 $$;
+
+
+
+CREATE OR REPLACE FUNCTION public.sp_getUserObservationLocations(
+	user_id character varying)
+	RETURNS table (
+		sp_geometry text
+	) 
+	LANGUAGE 'plpgsql'
+AS $$
+BEGIN
+	return query 	
+	SELECT ST_AsGeoJSON(ST_Transform(geometry, 3857)) FROM observation WHERE created_by = user_id;
+END;
+$$;

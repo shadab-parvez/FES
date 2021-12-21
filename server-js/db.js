@@ -25,7 +25,7 @@ const getUserProfileStatistics = (request, response) => {
         return client.query("SELECT * FROM sp_getprofilestatistics($1)", [user_id])
             .then(res => {
                 client.release();
-                response.status(200).send(res.rows)
+                response.status(200).send({data: res.rows})
             })
             .catch(e => {
                 client.release();
@@ -271,6 +271,23 @@ const getObservationDetails = (request, response) => {
     });
 }
 
+const getTotalObservations = (request, response) => {
+    const {user_id } = request.body;
+    pool.connect()
+    .then(client => {
+        return client.query('SELECT * FROM sp_getUserObservationLocations($1)',
+        [user_id])
+            .then(res => {
+                client.release();
+                response.status(200).send({data: res.rows})
+            })
+            .catch(e => {
+                client.release();
+                console.log(e.stack);
+            })
+    });
+}
+
 const getStates = (request, response) => {
     fetch('https://adminhierarchy.indiaobservatory.org.in/API/getStates',
     {
@@ -355,6 +372,7 @@ module.exports = {
     getObservations,
     getObservationDetails,
     searchSpecies,
+    getTotalObservations,
     getStates,
     getDistricts,
     getSubDistricts,
