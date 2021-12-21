@@ -244,7 +244,7 @@ const getObservations = (request, response) => {
         [user_id, checkListId])
             .then(res => {
                 client.release();
-                response.status(200).send(res.rows)
+                response.status(200).send({data: res.rows})
             })
             .catch(e => {
                 client.release();
@@ -262,7 +262,7 @@ const getObservationDetails = (request, response) => {
         [observationId])
             .then(res => {
                 client.release();
-                response.status(200).send(res.rows)
+                response.status(200).send({data: res.rows})
             })
             .catch(e => {
                 client.release();

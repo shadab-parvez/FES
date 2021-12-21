@@ -91,7 +91,7 @@ const getObservations = (checkListId) => {
             'features': []
         }
 
-        data.forEach((geom) => {
+        data.data.forEach((geom) => {
             geojsonObject.features.push({
                 'type': 'Feature',
                 'geometry': geom.json_row.geometry,
@@ -230,8 +230,8 @@ const getObservationDetails = (observationId) => {
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
-        console.log(data[0].json_row);
-        var obj = data[0].json_row;
+        console.log(data.data[0].json_row);
+        var obj = data.data[0].json_row;
         
         $("#occurenceTimestamp").html("Occurence " + getOccurenceDateTime(obj.date_time));
         $("#speciesName").html("<i>" + obj.scientific_name + "</i>, " + obj.scientific_name_authorship);

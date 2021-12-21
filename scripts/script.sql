@@ -363,7 +363,7 @@ BEGIN
 	INNER JOIN "location" loc ON o.observation_id = loc.observation_id
 	INNER JOIN taxon tax ON o.observation_id = tax.observation_id
 	WHERE o.observation_id = observationId
-	AND r."type" <> 'Event'
+	AND r."type" = 'Event'
 	) a;
 END;
 $BODY$;
