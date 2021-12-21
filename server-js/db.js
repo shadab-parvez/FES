@@ -64,7 +64,7 @@ const getChecklists = (request, response) => {
         return client.query("SELECT * FROM sp_getChecklists($1)", [user_id])
             .then(res => {
                 client.release();
-                response.status(200).send(res.rows)
+                response.status(200).send({data: res.rows})
             })
             .catch(e => {
                 client.release();

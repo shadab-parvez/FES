@@ -69,9 +69,7 @@ const getChecklists = () => {
 	.then(function(res){ return res.json(); })
 	.then(function(data) {
 		$("#chekListItems>dl").empty();
-		data.forEach(element => {			
-			//$("#chekListItems>dl").append("<dt><div><input id='" + element.sp_name + "' type='button' value='Add' class='add-observation-button' onclick='showObservationDialog(this.id)' ><b>" + element.sp_name + "</b></div></dt><dd>" + element.sp_count + " Observations</dd>")
-		
+		data.data.forEach(element => {
 			$("#chekListItems").append(
 '<div class="u-accordion-item">'
             + '<a class="u-accordion-link u-border-1 u-border-active-palette-1-base u-button-style u-text-active-black u-text-body-color u-text-hover-palette-1-light-2 u-accordion-link-1" id="link-accordion-f752" aria-controls="accordion-f752" aria-selected="true">'
