@@ -25,7 +25,7 @@ const getUserProfileStatistics = (request, response) => {
         return client.query("SELECT * FROM sp_getprofilestatistics($1)", [user_id])
             .then(res => {
                 client.release();
-                response.status(201).send(res.rows)
+                response.status(200).send(res.rows)
             })
             .catch(e => {
                 client.release();
@@ -44,11 +44,11 @@ const addCheckList = (request, response) => {
                 client.release();
                 console.log(res.rows[0]);
                 if(res.rows[0].sp_addchecklist == "SUCCESS")
-                    response.status(201).send(`added`);
+                    response.status(200).send(`added`);
                 else if(res.rows[0].sp_addchecklist == "EXISTS")
-                    response.status(201).send(`exists`);
+                    response.status(200).send(`exists`);
                 else
-                    response.status(201).send('failed')
+                    response.status(200).send('failed')
             })
             .catch(e => {
                 client.release();
@@ -64,7 +64,7 @@ const getChecklists = (request, response) => {
         return client.query("SELECT * FROM sp_getChecklists($1)", [user_id])
             .then(res => {
                 client.release();
-                response.status(201).send(res.rows)
+                response.status(200).send(res.rows)
             })
             .catch(e => {
                 client.release();
@@ -130,7 +130,7 @@ const addObservation = (request, response) => {
         });
     }
     //response.setHeader('Content-Type', 'application/json');
-    //response.status(201).send({ status: 'FILE_UPLOADED' });
+    //response.status(200).send({ status: 'FILE_UPLOADED' });
 
     console.log(uploadFileArray);
 
@@ -209,7 +209,7 @@ const addObservation = (request, response) => {
                 console.log(res.rows);
                 console.log(res.rows[0].sp_addobservation);
                 if(res.rows[0].sp_addobservation == "SUCCESS")
-                response.status(201).send({ status: 'SUCCESS' });
+                response.status(200).send({ status: 'SUCCESS' });
             })
             .catch(e => {
                 client.release();
@@ -227,7 +227,7 @@ const searchSpecies = (request, response) => {
         return client.query("SELECT * FROM sp_searchSpecies($1)", [keyword])
             .then(res => {
                 client.release();
-                response.status(201).send(res.rows)
+                response.status(200).send(res.rows)
             })
             .catch(e => {
                 client.release();
@@ -244,7 +244,7 @@ const getObservations = (request, response) => {
         [user_id, checkListId])
             .then(res => {
                 client.release();
-                response.status(201).send(res.rows)
+                response.status(200).send(res.rows)
             })
             .catch(e => {
                 client.release();
@@ -262,7 +262,7 @@ const getObservationDetails = (request, response) => {
         [observationId])
             .then(res => {
                 client.release();
-                response.status(201).send(res.rows)
+                response.status(200).send(res.rows)
             })
             .catch(e => {
                 client.release();
@@ -281,7 +281,7 @@ const getStates = (request, response) => {
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
-        response.status(201).send(data)
+        response.status(200).send(data)
     })
 }
 
@@ -296,7 +296,7 @@ const getDistricts = (request, response) => {
     })
     .then(function(res) { return res.text(); })
     .then(function(data) {
-        response.status(201).send(data)
+        response.status(200).send(data)
     })
 }
 
@@ -311,7 +311,7 @@ const getSubDistricts = (request, response) => {
     })
     .then(function(res) { return res.text(); })
     .then(function(data) {
-        response.status(201).send(data)
+        response.status(200).send(data)
     })
 }
 
@@ -326,7 +326,7 @@ const getBlocks = (request, response) => {
     })
     .then(function(res) { return res.text(); })
     .then(function(data) {
-        response.status(201).send(data)
+        response.status(200).send(data)
     })
 }
 
@@ -341,7 +341,7 @@ const getBoundaryGeometry = (request, response) => {
     })
     .then(function(res) { return res.text(); })
     .then(function(data) {
-        response.status(201).send(data)
+        response.status(200).send(data)
     })
 }
 
