@@ -419,21 +419,7 @@ $BODY$;
 
 CREATE OR REPLACE FUNCTION public.sp_searchSpecies(
 	sp_keyword character varying)
-    RETURNS TABLE(
-		sp_observation_id uuid,
-		sp_geom text,
-		sp_scientific_name character varying,
-		sp_kingdom character varying,
-		sp_phylum character varying,
-		sp_class character varying,
-		sp_order character varying,
-		sp_family character varying,
-		sp_subfamily character varying,
-		sp_genus character varying,
-		sp_sub_genus character varying,
-		sp_generic_name character varying,
-		sp_vernacular_name character varying
-	) 
+    RETURNS TABLE(json_row jsonb) 
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -441,8 +427,13 @@ CREATE OR REPLACE FUNCTION public.sp_searchSpecies(
 
 AS $BODY$
 BEGIN
-	return query
-	SELECT tax.observation_id, ST_AsGeoJSON(ST_Transform(o.geometry, 3857)) as "geom", tax.scientific_name, tax.kingdom, tax.phylum, tax.class, tax."order", tax.family, tax.subfamily, tax.genus, tax.sub_genus, tax.generic_name, tax.vernacular_name FROM taxon tax
+	RETURN query
+	SELECT jsonb_build_object(
+		'type',       'Feature',
+		'id',         observation_id,
+		'geometry',   ST_AsGeoJSON(geom)::jsonb,
+		'properties', to_jsonb(row) - 'geom'
+		) FROM (SELECT tax.observation_id, ST_AsGeoJSON(ST_Transform(o.geometry, 3857)) as "geom", tax.scientific_name, tax.kingdom, tax.phylum, tax.class, tax."order", tax.family, tax.subfamily, tax.genus, tax.sub_genus, tax.generic_name, tax.vernacular_name FROM taxon tax
 	INNER JOIN observation o ON o.observation_id = tax.observation_id
 	WHERE UPPER(tax.scientific_name) LIKE UPPER('%' || sp_keyword || '%')
 	OR UPPER(tax.kingdom) LIKE UPPER('%' || sp_keyword || '%')
@@ -454,10 +445,9 @@ BEGIN
 	OR UPPER(tax.genus) LIKE UPPER('%' || sp_keyword || '%')
 	OR UPPER(tax.sub_genus) LIKE UPPER('%' || sp_keyword || '%')
 	OR UPPER(tax.generic_name) LIKE UPPER('%' || sp_keyword || '%')
-	OR UPPER(tax.vernacular_name) LIKE UPPER('%' || sp_keyword || '%');
+	OR UPPER(tax.vernacular_name) LIKE UPPER('%' || sp_keyword || '%')) row;	
 END;
 $BODY$;
-
 
 
 CREATE OR REPLACE FUNCTION sp_getprofilestatistics(user_id character varying) 

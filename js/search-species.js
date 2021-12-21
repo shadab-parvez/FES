@@ -55,12 +55,13 @@ const searchSpeciesOnKeyPress = (keyword) => {
         }
 
         data.forEach((item) => {
-            $("#searchSpeciesTextBoxDropDown").append('<a href="#" id=' + item.sp_observation_id + ' onclick="selectSpeciesValue(this.id)">' + 
-            '<b style="color: #3e668d">' + item.sp_scientific_name + '</b>: ' + item.sp_kingdom + '>' + item.sp_phylum + ' > ' + item.sp_class + ' > ' + item.sp_order + ' > ' + item.sp_family + ' > ' + item.sp_subfamily + ' > ' + item.sp_genus + ' > ' + item.sp_generic_name + ' > ' + item.sp_vernacular_name + '</a>');
+            var _item = item.json_row;
+            $("#searchSpeciesTextBoxDropDown").append('<a href="#" id=' + _item.properties.observation_id + ' onclick="selectSpeciesValue(this.id)" > ' + 
+            '<b style="color: #3e668d">' + _item.properties.scientific_name + '</b>: ' + _item.properties.kingdom + ' > ' + _item.properties.phylum + ' > ' + _item.properties.class + ' > ' + _item.properties.order + ' > ' + _item.properties.family + ' > ' + _item.properties.subfamily + ' > ' + _item.properties.genus + ' > ' + _item.properties.generic_name + ' > ' + _item.properties.vernacular_name + '</a>');
             speciesGeojsonObject.features.push({
                 'type': 'Feature',
-                'geometry': JSON.parse(item.sp_geom)
-                //'properties': geom.json_row.properties
+                'geometry': _item.geometry,
+                'properties': _item.properties
             });
             
         })
@@ -89,6 +90,69 @@ const searchSpeciesOnKeyPress = (keyword) => {
             }
         });
         map.addLayer(vectorLayer);
+
+        // Add Pop up
+        var container = document.getElementById('popup');
+        var content_element = document.getElementById('popup-content');
+        var closer = document.getElementById('popup-closer');
+
+        var overlay = new ol.Overlay({
+            element: container,
+            autoPan: true,
+            offset: [0, -10],
+            autoPanAnimation: {
+                duration: 250
+            }
+        });
+        map.addOverlay(overlay);
+
+        closer.onclick = function() {
+            overlay.setPosition(undefined);
+            closer.blur();
+            return false;
+        };
+
+        map.on('click', function(evt) {
+            var feature = map.forEachFeatureAtPixel(evt.pixel,
+              function(feature, layer) {
+                return feature;
+              });
+            if (feature) {
+                var geometry = feature.getGeometry();
+                var coord = geometry.getCoordinates();
+                
+                $(".ol-popup").show();
+                var content = '<h3>' + feature.get('vernacular_name') + '</h3>';
+                content += '<table><thead><tr><th>Property</th><th>Value</th></tr></thead>';
+                content += '<tbody><tr><td>Scientific name</td><td>' + feature.get('scientific_name') + '</td></tr>';
+                content += '<tbody><tr><td>Kingdom</td><td>' + feature.get('kingdom') + '</td></tr>';
+                content += '<tbody><tr><td>Phylum</td><td>' + feature.get('phylum') + '</td></tr>';
+                content += '<tbody><tr><td>Class</td><td>' + feature.get('class') + '</td></tr>';
+                content += '<tbody><tr><td>Order</td><td>' + feature.get('order') + '</td></tr>';
+                content += '<tbody><tr><td>Family</td><td>' + feature.get('family') + '</td></tr>';
+                content += '<tbody><tr><td>Subfamily</td><td>' + feature.get('subfamily') + '</td></tr>';
+                content += '<tbody><tr><td>Genus</td><td>' + feature.get('genus') + '</td></tr>';
+                content += '<tbody><tr><td>Generic name</td><td>' + feature.get('generic_name') + '</td></tr>';
+                content += '<tbody><tr><td>Vernacular name</td><td>' + feature.get('vernacular_name') + '</td></tr>';
+                content += '</tbody></table>';
+
+                content_element.innerHTML = content;
+                overlay.setPosition(coord);
+                
+            }
+        });
+
+
+        map.on("pointermove", function (evt) {
+            var hit = this.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                return true;
+            }); 
+            if (hit) {
+                this.getTargetElement().style.cursor = 'pointer';
+            } else {
+                this.getTargetElement().style.cursor = '';
+            }
+        });
     })
 }
 

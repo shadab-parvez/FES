@@ -17,6 +17,14 @@
     display: block;
 }
 
+.dropdown-div a:hover {
+  color: white;
+  padding: 6px 12px;
+  text-decoration: none;
+  display: block;
+  background-color: #619bce;
+}
+
 .show {display: block;}
 
 .map {
@@ -39,8 +47,9 @@
 .ol-popup {
     position: absolute;
     display: none;
-    min-width: 700px;
-    height: 500px;
+    font-size: 11px;
+    min-width: 400px;
+    height: 300px;
     background-color: white;
     -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
     filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
