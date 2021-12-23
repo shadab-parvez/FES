@@ -35,7 +35,7 @@ const searchSpeciesOnKeyPress = (keyword) => {
         headers: {
             "Content-Type": "application/json"
             },
-        body: JSON.stringify({keyword})
+        body: JSON.stringify({keyword, srs: map.getView().getProjection().getCode().split(":")[1]})
     })
     .then(function(res){ return res.text(); })
     .then(function(data) {

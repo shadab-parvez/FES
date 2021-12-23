@@ -373,7 +373,8 @@ $BODY$;
 
 CREATE OR REPLACE FUNCTION public.sp_getobservations(
 	sp_user_id character varying,
-	sp_checklist_id character varying)
+	sp_checklist_id character varying,
+	sp_srs integer)
     RETURNS TABLE(json_row jsonb) 
     LANGUAGE 'plpgsql'
     COST 100
@@ -390,7 +391,7 @@ BEGIN
 		'id',         observation_id,
 		'geometry',   ST_AsGeoJSON(geometry)::jsonb,
 		'properties', to_jsonb(row) - 'geometry'
-		) FROM (SELECT o.observation_id, o.species_count, o.gender, o.male_count, o.female_count, o.child_count, o.date_time, ST_Transform(o.geometry, 3857) as "geometry", r."type", r."language", r.license, r.rights_holder,
+		) FROM (SELECT o.observation_id, o.species_count, o.gender, o.male_count, o.female_count, o.child_count, o.date_time, ST_Transform(o.geometry, sp_srs) as "geometry", r."type", r."language", r.license, r.rights_holder,
 		r.institution_id, r.institution_code, r.collection_id, r.collection_code, r.dataset_id, r.dataset_name, r.basis_of_record, r.dynamic_properties, r.file_uri
 		FROM observation o INNER JOIN record_level r
 		ON o.observation_id = r.observation_id
@@ -404,7 +405,7 @@ BEGIN
 		'id',         observation_id,
 		'geometry',   ST_AsGeoJSON(geometry)::jsonb,
 		'properties', to_jsonb(row) - 'geometry'
-		) FROM (SELECT o.observation_id, o.species_count, o.gender, o.male_count, o.female_count, o.child_count, o.date_time, ST_Transform(o.geometry, 3857) as "geometry", r."type", r."language", r.license, r.rights_holder,
+		) FROM (SELECT o.observation_id, o.species_count, o.gender, o.male_count, o.female_count, o.child_count, o.date_time, ST_Transform(o.geometry, sp_srs) as "geometry", r."type", r."language", r.license, r.rights_holder,
 		r.institution_id, r.institution_code, r.collection_id, r.collection_code, r.dataset_id, r.dataset_name, r.basis_of_record, r.dynamic_properties, r.file_uri
 		FROM observation o INNER JOIN record_level r
 		ON o.observation_id = r.observation_id
@@ -418,7 +419,8 @@ $BODY$;
 
 
 CREATE OR REPLACE FUNCTION public.sp_searchSpecies(
-	sp_keyword character varying)
+	sp_keyword character varying,
+	sp_srs integer)
     RETURNS TABLE(json_row jsonb) 
     LANGUAGE 'plpgsql'
     COST 100
@@ -433,7 +435,7 @@ BEGIN
 		'id',         observation_id,
 		'geometry',   ST_AsGeoJSON(geom)::jsonb,
 		'properties', to_jsonb(row) - 'geom'
-		) FROM (SELECT tax.observation_id, ST_AsGeoJSON(ST_Transform(o.geometry, 3857)) as "geom", tax.scientific_name, tax.kingdom, tax.phylum, tax.class, tax."order", tax.family, tax.subfamily, tax.genus, tax.sub_genus, tax.generic_name, tax.vernacular_name FROM taxon tax
+		) FROM (SELECT tax.observation_id, ST_AsGeoJSON(ST_Transform(o.geometry, sp_srs)) as "geom", tax.scientific_name, tax.kingdom, tax.phylum, tax.class, tax."order", tax.family, tax.subfamily, tax.genus, tax.sub_genus, tax.generic_name, tax.vernacular_name FROM taxon tax
 	INNER JOIN observation o ON o.observation_id = tax.observation_id
 	WHERE UPPER(tax.scientific_name) LIKE UPPER('%' || sp_keyword || '%')
 	OR UPPER(tax.kingdom) LIKE UPPER('%' || sp_keyword || '%')

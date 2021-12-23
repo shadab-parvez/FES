@@ -219,12 +219,12 @@ const addObservation = (request, response) => {
 }
 
 const searchSpecies = (request, response) => {
-    const { keyword } = request.body
+    const { keyword, srs } = request.body
     console.log(keyword)
     console.log(request.body)
     pool.connect()
     .then(client => {
-        return client.query("SELECT * FROM sp_searchSpecies($1)", [keyword])
+        return client.query("SELECT * FROM sp_searchSpecies($1, $2)", [keyword, srs])
             .then(res => {
                 client.release();
                 response.status(200).send(res.rows)
@@ -237,11 +237,11 @@ const searchSpecies = (request, response) => {
 }
 
 const getObservations = (request, response) => {
-    const {user_id, checkListId } = request.body;
+    const {user_id, checkListId, srs } = request.body;
     pool.connect()
     .then(client => {
-        return client.query('SELECT * FROM sp_getObservations($1, $2)',
-        [user_id, checkListId])
+        return client.query('SELECT * FROM sp_getObservations($1, $2, $3)',
+        [user_id, checkListId, srs])
             .then(res => {
                 client.release();
                 response.status(200).send({data: res.rows})
@@ -272,11 +272,11 @@ const getObservationDetails = (request, response) => {
 }
 
 const getTotalObservations = (request, response) => {
-    const {user_id } = request.body;
+    const {user_id, srs } = request.body;
     pool.connect()
     .then(client => {
-        return client.query('SELECT * FROM sp_getUserObservationLocations($1)',
-        [user_id])
+        return client.query('SELECT * FROM sp_getUserObservationLocations($1, $2)',
+        [user_id, srs])
             .then(res => {
                 client.release();
                 response.status(200).send({data: res.rows})

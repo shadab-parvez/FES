@@ -22,5 +22,35 @@
         },
         "fileUploadPath": "C:/work/projects/FES/uploads/",
         "fileUploadVirtualPath": "/uploads/"
-      }
+      },
+    "SwaggerConfig": {
+      "definition": {
+          "openapi": "3.0.0",
+          "info": {
+              "title": "IBIS API",
+              "version": "1.0.0",
+              "description": "IBIS API Information",
+              "contact": {
+                  "name": "Shadab Abidi",
+                  "url": "https://altztech.com",
+                  "email": "shadab.parvez@altztech.com"
+              },
+              "host": ["http://localhost:300", "http://3.12.73.235:8080"],
+              "servers": [
+                  {
+                      "url": "http://localhost:3000",
+                      "description": "Development server"
+                  },
+                  {
+                      "url": "http://3.12.73.235:8080",
+                      "description": "Production server"
+                  }
+              ]
+          },
+          "schemes": [
+            "http"
+        ]
+      },
+      "apis": ["app.js"]
+  }
   }

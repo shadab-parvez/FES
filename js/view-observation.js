@@ -62,12 +62,14 @@ const getObservations = (checkListId) => {
     if(checkListId == "")
         data = {
             user_id: 'UserId_1',
-            checkListId: ""
+            checkListId: "",
+            srs: map.getView().getProjection().getCode().split(":")[1]
         };
     else
         data = {
             user_id: 'UserId_1',
-            checkListId: checkListId
+            checkListId: checkListId,
+            srs: map.getView().getProjection().getCode().split(":")[1]
         };
     fetch(getObservationUrl,
     {

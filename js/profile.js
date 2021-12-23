@@ -67,7 +67,8 @@ const getTotalUserObservations = () => {
     })
 
     var data = {
-        user_id : 'UserId_1'
+        user_id : 'UserId_1',
+        srs: map.getView().getProjection().getCode().split(":")[1]
     };
 
     fetch(getTotalObservationsUrl,
