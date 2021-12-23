@@ -19,11 +19,10 @@ const app = express()
 const swaggerConfig = config.get('SwaggerConfig');
 const swaggerOptions = swaggerConfig;
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 var appMode;
 if(process.argv[2] == "dev"){
     appMode = "Development";
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 }
 else if(process.argv[2] == "production")
     appMode = "Production";
