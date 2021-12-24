@@ -45,10 +45,18 @@ app.use(
 
 app.use(fileUpload());
 app.use(require('body-parser').json())
-console.log(__dirname)
 app.use(express.static(path.join(__dirname, '/css')))
 app.use(express.static(path.join(__dirname, '/js')))
 app.use(express.static(path.join(__dirname, '/uploads')))
+
+
+/*
+* Logging Initialization
+*/
+app.use((req, res, next) => {
+    console.log("Request ip address: " + req.ip);
+    next();
+})
 
 
 /**

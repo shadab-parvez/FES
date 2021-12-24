@@ -482,17 +482,20 @@ BEGIN
 END;
 $$;
 
+-- DROP FUNCTION IF EXISTS public.sp_getuserobservationlocations(character varying, integer);
 
+CREATE OR REPLACE FUNCTION public.sp_getuserobservationlocations(
+	user_id character varying,
+	sp_srs integer)
+    RETURNS TABLE(sp_geometry text) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
 
-CREATE OR REPLACE FUNCTION public.sp_getUserObservationLocations(
-	user_id character varying)
-	RETURNS table (
-		sp_geometry text
-	) 
-	LANGUAGE 'plpgsql'
-AS $$
+AS $BODY$
 BEGIN
 	return query 	
-	SELECT ST_AsGeoJSON(ST_Transform(geometry, 3857)) FROM observation WHERE created_by = user_id;
+	SELECT ST_AsGeoJSON(ST_Transform(geometry, sp_srs)) FROM observation WHERE created_by = user_id;
 END;
-$$;
+$BODY$;

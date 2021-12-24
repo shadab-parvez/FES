@@ -3,7 +3,7 @@
       "appPort": 8080,
       "dbConfig": {
         "host": "fesdatabase.czxhkksnwxim.us-east-2.rds.amazonaws.com",
-        "database": "gov_pro_db",
+        "database": "fes_db",
         "user": "postgres",
         "password": "fEs_7654",
         "port": 5432
@@ -36,7 +36,7 @@
                   "email": "shadab.parvez@altztech.com"
               },
               "host": ["http://localhost:300", "http://3.12.73.235:8080"],
-              "servers": [
+              "urls": [
                   {
                       "url": "http://localhost:3000",
                       "description": "Development server"

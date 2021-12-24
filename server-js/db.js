@@ -3,6 +3,8 @@ const config = require('config');
 const Pool = require('pg').Pool
 const fetch = require('cross-fetch');
 var FormData = require('form-data');
+const logger = require('./logger')
+
 
 var appMode;
 if(process.argv[2] == "dev")
@@ -25,11 +27,22 @@ const getUserProfileStatistics = (request, response) => {
         return client.query("SELECT * FROM sp_getprofilestatistics($1)", [user_id])
             .then(res => {
                 client.release();
+                logger.log({
+                    level: 'info',
+                    user: user_id,
+                    method: 'getUserProfileStatistics',
+                    message: res.rows
+                });
                 response.status(200).send({data: res.rows})
             })
             .catch(e => {
                 client.release();
-                console.log(e.stack);
+                logger.log({
+                    level: 'error',
+                    user: user_id,
+                    method: 'getUserProfileStatistics',
+                    message: e.stack
+                });
             })
     });
 }
@@ -43,6 +56,12 @@ const addCheckList = (request, response) => {
             .then(res => {
                 client.release();
                 console.log(res.rows[0]);
+                logger.log({
+                    level: 'info',
+                    user: user_id,
+                    method: 'addCheckList',
+                    message: res.rows[0]
+                });
                 if(res.rows[0].sp_addchecklist == "SUCCESS")
                     response.status(200).send(`added`);
                 else if(res.rows[0].sp_addchecklist == "EXISTS")
@@ -52,7 +71,12 @@ const addCheckList = (request, response) => {
             })
             .catch(e => {
                 client.release();
-                console.log(e.stack);
+                logger.log({
+                    level: 'error',
+                    user: user_id,
+                    method: 'addCheckList',
+                    message: e.stack
+                });
             })
     });
 }
@@ -64,11 +88,22 @@ const getChecklists = (request, response) => {
         return client.query("SELECT * FROM sp_getChecklists($1)", [user_id])
             .then(res => {
                 client.release();
+                logger.log({
+                    level: 'info',
+                    user: user_id,
+                    method: 'getChecklists',
+                    message: res.rows
+                });
                 response.status(200).send({data: res.rows})
             })
             .catch(e => {
                 client.release();
-                console.log(e.stack);
+                logger.log({
+                    level: 'error',
+                    user: user_id,
+                    method: 'getChecklists',
+                    message: e.stack
+                });
             })
     });
 }
@@ -129,9 +164,6 @@ const addObservation = (request, response) => {
                 return response.status(500).send(err);
         });
     }
-    //response.setHeader('Content-Type', 'application/json');
-    //response.status(200).send({ status: 'FILE_UPLOADED' });
-
     console.log(uploadFileArray);
 
     pool.connect()
@@ -140,7 +172,7 @@ const addObservation = (request, response) => {
         + "$16, $17, $18, $19, $20, $21,"
         + "$22, $23, $24, $25, $26, $27,"
         + "$28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56, $57)",
-        [request.body.addObservationCheckListId,
+        [   request.body.addObservationCheckListId,
             request.body.addObservationCheckListName,
             request.body.addObservationSpeciesCount,
             request.body.addObservationSpeciesName,
@@ -208,12 +240,24 @@ const addObservation = (request, response) => {
                 client.release();
                 console.log(res.rows);
                 console.log(res.rows[0].sp_addobservation);
-                if(res.rows[0].sp_addobservation == "SUCCESS")
-                response.status(200).send({ status: 'SUCCESS' });
+                if(res.rows[0].sp_addobservation == "SUCCESS") {
+                    logger.log({
+                        level: 'info',
+                        user: request.body.addObservationUserId,
+                        method: 'addObservation',
+                        message: res.rows
+                    });
+                    response.status(200).send({ status: 'SUCCESS' });
+                }
             })
             .catch(e => {
                 client.release();
-                console.log(e.stack);
+                logger.log({
+                    level: 'error',
+                    user: user_id,
+                    method: 'addObservation',
+                    message: e.stack
+                });
             })
     });
 }
@@ -227,11 +271,22 @@ const searchSpecies = (request, response) => {
         return client.query("SELECT * FROM sp_searchSpecies($1, $2)", [keyword, srs])
             .then(res => {
                 client.release();
+                logger.log({
+                    level: 'info',
+                    //user: user_id,
+                    method: 'searchSpecies',
+                    message: res.rows
+                });
                 response.status(200).send(res.rows)
             })
             .catch(e => {
                 client.release();
-                console.log(e.stack);
+                logger.log({
+                    level: 'error',
+                    //user: user_id,
+                    method: 'searchSpecies',
+                    message: e.stack
+                });
             })
     });
 }
@@ -244,12 +299,22 @@ const getObservations = (request, response) => {
         [user_id, checkListId, srs])
             .then(res => {
                 client.release();
+                logger.log({
+                    level: 'info',
+                    user: user_id,
+                    method: 'getObservations',
+                    message: res.rows
+                });
                 response.status(200).send({data: res.rows})
             })
             .catch(e => {
                 client.release();
-                console.log("ERROR");
-                console.log(e.stack);
+                logger.log({
+                    level: 'error',
+                    user: user_id,
+                    method: 'getObservations',
+                    message: e.stack
+                });
             })
     });
 }
@@ -262,11 +327,22 @@ const getObservationDetails = (request, response) => {
         [observationId])
             .then(res => {
                 client.release();
+                logger.log({
+                    level: 'info',
+                    //user: user_id,
+                    method: 'getObservationDetails',
+                    message: res.rows
+                });
                 response.status(200).send({data: res.rows})
             })
             .catch(e => {
                 client.release();
-                console.log(e.stack);
+                logger.log({
+                    level: 'error',
+                    //user: user_id,
+                    method: 'getObservationDetails',
+                    message: e.stack
+                });
             })
     });
 }
@@ -279,11 +355,22 @@ const getTotalObservations = (request, response) => {
         [user_id, srs])
             .then(res => {
                 client.release();
+                logger.log({
+                    level: 'info',
+                    user: user_id,
+                    method: 'getTotalObservations',
+                    message: res.rows
+                });
                 response.status(200).send({data: res.rows})
             })
             .catch(e => {
                 client.release();
-                console.log(e.stack);
+                logger.log({
+                    level: 'error',
+                    user: user_id,
+                    method: 'getTotalObservations',
+                    message: e.stack
+                });
             })
     });
 }
