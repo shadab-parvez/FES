@@ -437,7 +437,7 @@ BEGIN
 		'id',         observation_id,
 		'geometry',   ST_AsGeoJSON(geom)::jsonb,
 		'properties', to_jsonb(row) - 'geom'
-		) FROM (SELECT tax.observation_id, ST_AsGeoJSON(ST_Transform(o.geometry, sp_srs)) as "geom", tax.scientific_name, tax.kingdom, tax.phylum, tax.class, tax."order", tax.family, tax.subfamily, tax.genus, tax.sub_genus, tax.generic_name, tax.vernacular_name FROM taxon tax
+		) FROM (SELECT tax.observation_id, ST_Transform(o.geometry, sp_srs) as "geom", tax.scientific_name, tax.kingdom, tax.phylum, tax.class, tax."order", tax.family, tax.subfamily, tax.genus, tax.sub_genus, tax.generic_name, tax.vernacular_name FROM taxon tax
 	INNER JOIN observation o ON o.observation_id = tax.observation_id
 	WHERE UPPER(tax.scientific_name) LIKE UPPER('%' || sp_keyword || '%')
 	OR UPPER(tax.kingdom) LIKE UPPER('%' || sp_keyword || '%')

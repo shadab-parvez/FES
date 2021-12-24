@@ -11,6 +11,18 @@
       "fileUploadPath": "/home/ubuntu/FES/uploads/",
       "fileUploadVirtualPath": "/uploads/"
     },
+    "Staging": {
+      "appPort": 8080,
+      "dbConfig": {
+        "host": "fesdatabase.czxhkksnwxim.us-east-2.rds.amazonaws.com",
+        "database": "fes_db",
+        "user": "postgres",
+        "password": "fEs_7654",
+        "port": 5432
+      },
+      "fileUploadPath": "/home/ubuntu/FES/uploads/",
+      "fileUploadVirtualPath": "/uploads/"
+    },
     "Development": {
         "appPort": 3000,
         "dbConfig": {
@@ -52,5 +64,5 @@
         ]
       },
       "apis": ["app.js"]
-  }
+    }
   }

@@ -20,14 +20,6 @@ const logger = winston.createLogger({
 });
 
 
-   
-  //
-  // If we're not in production then log to the `console` with the format:
-  // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-  //
-/* logger.add(new winston.transports.Console({
-    format: winston.format.simple(),
-})); */
 
 
 module.exports = logger;
