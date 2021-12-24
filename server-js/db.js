@@ -254,7 +254,7 @@ const addObservation = (request, response) => {
                 client.release();
                 logger.log({
                     level: 'error',
-                    user: user_id,
+                    user: request.body.addObservationUserId,
                     method: 'addObservation',
                     message: e.stack
                 });
