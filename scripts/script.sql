@@ -124,7 +124,9 @@ CREATE TABLE IF NOT EXISTS public.record_level
     dynamic_properties character varying COLLATE pg_catalog."default",
     file_path character varying COLLATE pg_catalog."default",
     file_uri character varying COLLATE pg_catalog."default",
-    observation_id uuid
+    is_image boolean,
+    is_video boolean,
+	observation_id uuid
 );
 
 CREATE TABLE IF NOT EXISTS public.taxon
@@ -269,7 +271,7 @@ DECLARE
 BEGIN
 	var_observation_id := uuid_generate_v4();
 	INSERT INTO observation(observation_id, checklist_id, species_count, species_id, need_id, gender, male_count, female_count, child_count, date_time, created_by, geometry)
-	VALUES (var_observation_id, sp_checklist_id, sp_species_count, 0, null, sp_gender, sp_male_count, sp_female_count, sp_child_count, CURRENT_TIMESTAMP, sp_created_by, ST_MakePoint(sp_longitude, sp_latitude));
+	VALUES (var_observation_id, sp_checklist_id, sp_species_count, 0, null, sp_gender, sp_male_count, sp_female_count, sp_child_count, CURRENT_TIMESTAMP, sp_created_by, ST_SetSRID(ST_MakePoint(sp_longitude, sp_latitude), 4326));
 	
 	INSERT INTO record_level(
 	observation_id, record_level_id, type, language, license, rights_holder, access_rights, institution_id, collection_id, dataset_id, institution_code, collection_code, dataset_name, basis_of_record, dynamic_properties, file_path, file_uri, is_image, is_video)
